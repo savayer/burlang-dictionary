@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-export default function Navbar() {
+export default function Navbar({ title }) {
   return (
     <View style={styles.navbar}>
-      <Text style={styles.title}>Русско-Бурятский словарь</Text>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
