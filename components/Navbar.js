@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
-export default function Navbar({ title }) {
+export default function Navbar({ title, children }) {
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>{title}</Text>
+      {children}
     </View>
   );
 }

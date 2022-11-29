@@ -1,4 +1,4 @@
-// @todo use react-native-localization
+// @todo use react-native-localization or something else
 
 const t = {
   title: {
@@ -25,7 +25,7 @@ const t = {
     ru: 'Переводы',
     bur: 'Оршуулганууд',
   },
-  occurences: {
+  occurrences: {
     ru: 'Вхождения',
     bur: 'Оршуулгын үгэ соо ороошо үгэнүүд',
   },

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { catchHttpErrors } from '../utils/catchHttpErrors';
 
 export const translateWord = async (translationType = 'bur2ru', value) => {
   try {
@@ -12,6 +13,6 @@ export const translateWord = async (translationType = 'bur2ru', value) => {
 
     return data;
   } catch (error) {
-    throw error;
+    catchHttpErrors(error);
   }
 };

@@ -8,10 +8,11 @@ import {
   Text,
   View,
   TouchableOpacity,
+  ActivityIndicator,
   Alert,
 } from 'react-native';
 import Navbar from './components/Navbar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { translateWord } from './actions/translate';
 import t from './constants/t';
 import appStyles from './constants/styles';
@@ -20,6 +21,9 @@ import List from './components/List';
 export default function App() {
   const [lang, setLang] = useState('ru');
   const [text, setText] = useState('');
+  const requestWasSentWithTheText = useRef(false);
+  const clicksNumber = useRef(0);
+  const [isLoading, setLoading] = useState(false);
   const [outputData, setOutputData] = useState();
 
   function switchLanguage() {
@@ -42,9 +46,37 @@ export default function App() {
     }
 
     const translationType = `${lang}2${lang === 'ru' ? 'bur' : 'ru'}`;
-    const data = await translateWord(translationType, text);
 
-    setOutputData(data);
+    try {
+      if (requestWasSentWithTheText.current) {
+        clicksNumber.current++;
+
+        if (clicksNumber.current === 3) {
+          Alert.alert(
+            'Спокойствие!',
+            'Вы уже имеете результат этого перевода на экране.',
+            [{ text: 'ОК' }],
+          );
+          clicksNumber.current = 0;
+        }
+        return;
+      }
+
+      console.log('req');
+      setLoading(true);
+      const data = await translateWord(translationType, text);
+
+      requestWasSentWithTheText.current = true;
+      setOutputData(data);
+    } catch (error) {
+      console.error(error);
+
+      Alert.alert('Ошибка', 'Что-то пошло не так, попробуйте снова.', [
+        { text: 'OK' },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -55,22 +87,33 @@ export default function App() {
         height: '100%',
       }}
     >
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.wrapper}>
-          <Navbar title={t.title[lang]} />
+          <Navbar title={t.title[lang]}>
+            {isLoading && (
+              <ActivityIndicator
+                color="#fff"
+                style={{ position: 'absolute', right: 10, top: 20 }}
+              />
+            )}
+          </Navbar>
 
           <View style={styles.container}>
             <TextInput
               style={styles.input}
               placeholder={t.placeholder[lang]}
               value={text}
-              onChangeText={setText}
+              onChangeText={(inputText) => {
+                setText(inputText);
+                requestWasSentWithTheText.current = false;
+              }}
             />
 
             <View style={{ marginTop: 10 }}>
               <Button
                 uppercase={false}
                 title={t.translate[lang]}
+                disabled={isLoading}
                 onPress={translate}
                 color="#685bc7"
               />
@@ -80,7 +123,7 @@ export default function App() {
               <>
                 <List items={outputData.result} title={t.translations[lang]} />
 
-                <List items={outputData.include} title={t.occurences[lang]} />
+                <List items={outputData.include} title={t.occurrences[lang]} />
 
                 <List
                   items={outputData.fuzzy}
