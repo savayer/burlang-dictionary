@@ -2,8 +2,6 @@ import {
   StyleSheet,
   Button,
   ScrollView,
-  SafeAreaView,
-  StatusBar,
   TextInput,
   Text,
   View,
@@ -11,6 +9,8 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import Navbar from './components/Navbar';
 import { useRef, useState } from 'react';
 import { translateWord } from './actions/translate';
@@ -62,7 +62,6 @@ export default function App() {
         return;
       }
 
-      console.log('req');
       setLoading(true);
       const data = await translateWord(translationType, text);
 
@@ -82,12 +81,13 @@ export default function App() {
   return (
     <SafeAreaView
       style={{
-        paddingTop: StatusBar.currentHeight + 5,
         paddingBottom: 10,
         height: '100%',
       }}
     >
       <ScrollView keyboardShouldPersistTaps="handled">
+        <StatusBar style="auto" />
+
         <View style={styles.wrapper}>
           <Navbar title={t.title[lang]}>
             {isLoading && (
