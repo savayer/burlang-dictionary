@@ -1,0 +1,20 @@
+{
+  "app_name_ru": "Ород-Буряад толи",
+  "app_name_bur": "Буряад-Ород толи",
+  "input_placeholder_ru": "Үгэ бэшэгты",
+  "input_placeholder_bur": "Үгэ бэшэгты",
+  "translate": "Оршуулха",
+  "no_text_to_translate": "Оршуулха юумэ үгы",
+  "no_text_to_translate_description": "Үгэ бэшэгты",
+  "translations": "Оршуулганууд",
+  "occurrences": "Оршуулгын үгэ соо ороошо үгэнүүд",
+  "possible_translations": "Энэ үгэ байжа болохо",
+  "phrases_not_found": "Мэдүүлэл/үгэ олдобо үгы",
+  "calm": "Амгалан байдал",
+  "you_have_the_translations": "Вы уже имеете результат этого перевода на экране.",
+  "error": "Алдуу",
+  "something_went_wrong": "Что-то пошло не так, попробуйте снова.",
+  "search": "Бэдэрэлгэ",
+  "favorites": "Шэлэгдэмэл",
+  "settings": "Тааруулга"
+}

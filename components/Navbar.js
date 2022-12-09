@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import colors from '../constants/colors';
 
 export default function Navbar({ title, children }) {
   return (
@@ -12,18 +13,10 @@ export default function Navbar({ title, children }) {
 
 const styles = StyleSheet.create({
   navbar: {
-    backgroundColor: '#685bc7',
-    paddingVertical: 15,
+    backgroundColor: colors.blue,
+    paddingTop: 15,
+    paddingBottom: 25,
     paddingHorizontal: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.43,
-    shadowRadius: 9.51,
-
-    elevation: 15,
   },
   title: {
     fontSize: 20,

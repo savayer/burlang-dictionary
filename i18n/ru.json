@@ -1,0 +1,20 @@
+{
+  "app_name_ru": "Русско-Бурятский словарь",
+  "app_name_bur": "Бурятско-русский словарь",
+  "input_placeholder_ru": "Введите слово на русском",
+  "input_placeholder_bur": "Введите слово на бурятском",
+  "translate": "Перевести",
+  "no_text_to_translate": "Нечего переводить",
+  "no_text_to_translate_description": "Введите слово для перевода",
+  "translations": "Переводы",
+  "occurrences": "Вхождения",
+  "possible_translations": "Возможные переводы",
+  "phrases_not_found": "Фразы/слова не найдены",
+  "calm": "Спокойствие",
+  "you_have_the_translations": "Вы уже имеете результат этого перевода на экране.",
+  "error": "Ошибка",
+  "something_went_wrong": "Что-то пошло не так, попробуйте снова.",
+  "search": "Поиск",
+  "favorites": "Избранное",
+  "settings": "Настройки"
+}
