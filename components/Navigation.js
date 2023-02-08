@@ -1,3 +1,4 @@
+import React from 'react';
 import Home from '../views/Home';
 import Favorites from '../views/Favorites';
 import Settings from '../views/Settings';
