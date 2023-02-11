@@ -7,6 +7,7 @@ import { Search, FolderWithStar, Tuning } from './icons';
 import i18n from '../constants/i18n';
 import { TouchableOpacity } from 'react-native';
 import colors from '../constants/colors';
+import { Info } from './icons/Info';
 
 const Tab = createBottomTabNavigator();
 const iconHeight = 20;
@@ -41,13 +42,18 @@ export default function Navigation() {
       },
     },
     {
-      name: i18n.t('settings'),
+      name: i18n.t('information'),
       component: Settings,
       options: {
-        tabBarIcon: ({ color }) => (
-          <Tuning width={iconWidth} height={iconHeight} stroke={color} />
+        // @todo it can be rewritten with TW completely
+        tabBarIcon: ({ focused, color }) => (
+          <Info
+            className="w-5 h-5"
+            circleClassName={focused ? 'stroke-bur-blue' : 'stroke-neutral-400'}
+            fill={color}
+          />
         ),
-        tabBarLabel: i18n.t('settings').toLowerCase(),
+        tabBarLabel: i18n.t('information').toLowerCase(),
       },
     },
   ];
