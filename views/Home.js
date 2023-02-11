@@ -22,7 +22,7 @@ import colors from '../constants/colors';
 import { Exchange, Star } from '../components/icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Home() {
+export default function Home({ route }) {
   const [lang, setLang] = useState('ru');
   const [text, setText] = useState('');
   const requestWasSentWithTheText = useRef(false);
@@ -48,6 +48,22 @@ export default function Home() {
   useEffect(() => {
     translationType.current = `${lang}2${lang === 'ru' ? 'bur' : 'ru'}`;
   }, [lang]);
+
+  useEffect(() => {
+    if (route.params?.translation?.type) {
+      setLang(route.params.translation.type.split('2')[0]);
+      setText(route.params.translation.key);
+      requestWasSentWithTheText.current = false;
+      // we can't use translate method here because setState is asynchronous
+      // translate().catch((e) => console.error('search favorite word error', e));
+    }
+  }, [route]);
+
+  useEffect(() => {
+    if (route.params?.translation?.type) {
+      translate().catch((e) => console.error('search favorite word error', e));
+    }
+  }, [text]);
 
   async function translate() {
     if (text.trim() === '') {

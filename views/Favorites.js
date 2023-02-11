@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableHighlight } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableHighlight,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../constants/colors';
@@ -54,8 +61,14 @@ export default function Favorites({ navigation }) {
     });
   }, []);
 
+  function searchFavoriteWord(translation) {
+    navigation.navigate('Home', {
+      translation,
+    });
+  }
+
   return (
-    <ScrollView keyboardShouldPersistTaps="handled">
+    <ScrollView>
       <SafeAreaView className="min-h-screen bg-white">
         <ScreenHeader
           className="mb-0"
@@ -85,7 +98,7 @@ export default function Favorites({ navigation }) {
             {Object.keys(favorites).map((type) => (
               <View key={type} className="mb-6">
                 <View
-                  className="bg-bur-yellow px-2 py-2"
+                  className="bg-bur-yellow px-4 py-2"
                   style={{ backgroundColor: '#f1b742' }}
                 >
                   <Text className="text-white font-bold">
@@ -95,15 +108,24 @@ export default function Favorites({ navigation }) {
                   </Text>
                 </View>
 
-                <View className="px-2 gap-2">
+                <View className="px-2">
                   {favorites[type].map((translation, i) => (
-                    <View key={i}>
-                      <View className="border-b border-neutral-300 py-2">
-                        <Text className="font-bold">{translation.key}</Text>
-                      </View>
+                    <TouchableHighlight
+                      underlayColor={colors.neutral100}
+                      className="px-2 my-1"
+                      onPress={searchFavoriteWord.bind(null, translation)}
+                      key={i}
+                    >
+                      <>
+                        <View className="border-b border-neutral-300 py-1">
+                          <Text className="font-bold">
+                            {translation.key.toLowerCase()}
+                          </Text>
+                        </View>
 
-                      <Text>{translation.value}</Text>
-                    </View>
+                        <Text>{translation.value}</Text>
+                      </>
+                    </TouchableHighlight>
                   ))}
                 </View>
               </View>
@@ -112,5 +134,17 @@ export default function Favorites({ navigation }) {
         )}
       </SafeAreaView>
     </ScrollView>
+  );
+}
+
+function Translation({ item }) {
+  return (
+    <View className="mb-2">
+      <View className="border-b border-neutral-300 py-2">
+        <Text className="font-bold">{item.key.toLowerCase()}</Text>
+      </View>
+
+      <Text>{item.value}</Text>
+    </View>
   );
 }
