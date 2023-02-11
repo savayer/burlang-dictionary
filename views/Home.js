@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Alert,
   TouchableHighlight,
+  Pressable,
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import List from '../components/List';
@@ -19,6 +20,7 @@ import { translateWord } from '../actions/translate';
 import i18n from '../constants/i18n';
 import colors from '../constants/colors';
 import { Exchange } from '../components/icons';
+import { Star } from '../components/icons/Star';
 
 export default function Home() {
   const [lang, setLang] = useState('ru');
@@ -27,6 +29,7 @@ export default function Home() {
   const clicksNumber = useRef(0);
   const [isLoading, setLoading] = useState(false);
   const [outputData, setOutputData] = useState();
+  const [isFavorite, setFavorite] = useState(false);
 
   function switchLanguage() {
     setLang(lang === 'ru' ? 'bur' : 'ru');
@@ -94,11 +97,24 @@ export default function Home() {
         <View style={styles.wrapper}>
           <Navbar title={i18n.t(`app_name_${lang}`)}>
             {isLoading && (
-              <ActivityIndicator
-                color="#fff"
-                style={{ position: 'absolute', right: 10, top: 20 }}
-              />
+              <ActivityIndicator color="#fff" style={{ marginLeft: 10 }} />
             )}
+
+            <Pressable
+              onPress={() => setFavorite(!isFavorite)}
+              style={{ marginLeft: 'auto' }}
+            >
+              <Star
+                style={{
+                  width: 18,
+                  height: 18,
+                  fill: isFavorite ? colors.yellow : colors.neutral400,
+                }}
+                activeStyle={{
+                  fill: isFavorite ? colors.yellow : 'transparent',
+                }}
+              />
+            </Pressable>
           </Navbar>
 
           <View style={styles.container}>

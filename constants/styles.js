@@ -13,7 +13,7 @@ const appStyles = {
     overflow: 'hidden',
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: -10,
+    marginTop: -15,
   },
   input: {
     marginTop: 20,
