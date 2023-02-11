@@ -49,8 +49,6 @@ export default function Favorites({ navigation }) {
           };
         });
 
-        console.log(groupBy(parsedArray, 'type'));
-
         setFavorites(groupBy(parsedArray, 'type'));
       });
     });
@@ -65,7 +63,7 @@ export default function Favorites({ navigation }) {
           title={i18n.t('favorites')}
         />
 
-        {!favorites && (
+        {(!favorites || Object.keys(favorites).length === 0) && (
           <View className="m-auto">
             <Text className="text-lg font-bold">Нет избранных слов</Text>
             <TouchableHighlight
@@ -84,8 +82,8 @@ export default function Favorites({ navigation }) {
 
         {favorites && Object.keys(favorites).length > 0 && (
           <View>
-            {Object.keys(favorites).map((type, i) => (
-              <View key={i} className="mb-6">
+            {Object.keys(favorites).map((type) => (
+              <View key={type} className="mb-6">
                 <View
                   className="bg-bur-yellow px-2 py-2"
                   style={{ backgroundColor: '#f1b742' }}
@@ -98,8 +96,8 @@ export default function Favorites({ navigation }) {
                 </View>
 
                 <View className="px-2 gap-2">
-                  {favorites[type].map((translation) => (
-                    <View key={translation.id}>
+                  {favorites[type].map((translation, i) => (
+                    <View key={i}>
                       <View className="border-b border-neutral-300 py-2">
                         <Text className="font-bold">{translation.key}</Text>
                       </View>

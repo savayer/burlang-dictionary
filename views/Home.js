@@ -55,6 +55,8 @@ export default function Home() {
       return;
     }
 
+    setFavorite(false);
+
     try {
       if (requestWasSentWithTheText.current) {
         clicksNumber.current++;
@@ -72,6 +74,11 @@ export default function Home() {
 
       setLoading(true);
       const data = await translateWord(translationType.current, text);
+      const theTextFromStore = await AsyncStorage.getItem(text.toLowerCase());
+
+      if (theTextFromStore) {
+        setFavorite(true);
+      }
 
       requestWasSentWithTheText.current = true;
       setOutputData(data);
@@ -95,21 +102,21 @@ export default function Home() {
         translationType: translationType.current,
       });
 
-      console.log(key, value);
-
       try {
         if (isFavorite) {
           await AsyncStorage.removeItem(key);
           setFavorite(false);
+          console.log('removed');
         } else {
           await AsyncStorage.setItem(key, value);
           setFavorite(true);
+          console.log('added');
         }
       } catch (e) {
         console.error(e);
       }
     },
-    [outputData],
+    [outputData, isFavorite],
   );
 
   return (
@@ -129,7 +136,7 @@ export default function Home() {
               <ActivityIndicator color="#fff" style={{ marginLeft: 10 }} />
             )}
 
-            {outputData?.result && (
+            {outputData?.result && outputData.result[0]?.name !== '-' && (
               <Pressable
                 onPress={handleFavorites.bind(null, outputData.result)}
                 style={{ marginLeft: 'auto' }}
