@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,14 +19,15 @@ import { useRef, useState } from 'react';
 import { translateWord } from '../actions/translate';
 import i18n from '../constants/i18n';
 import colors from '../constants/colors';
-import { Exchange } from '../components/icons';
-import { Star } from '../components/icons/Star';
+import { Exchange, Star } from '../components/icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home() {
   const [lang, setLang] = useState('ru');
   const [text, setText] = useState('');
   const requestWasSentWithTheText = useRef(false);
   const clicksNumber = useRef(0);
+  const translationType = useRef(`${lang}2${lang === 'ru' ? 'bur' : 'ru'}`);
   const [isLoading, setLoading] = useState(false);
   const [outputData, setOutputData] = useState();
   const [isFavorite, setFavorite] = useState(false);
@@ -44,13 +45,15 @@ export default function Home() {
       [{ text: 'OK' }],
     );
 
+  useEffect(() => {
+    translationType.current = `${lang}2${lang === 'ru' ? 'bur' : 'ru'}`;
+  }, [lang]);
+
   async function translate() {
     if (text.trim() === '') {
       alertNoText();
       return;
     }
-
-    const translationType = `${lang}2${lang === 'ru' ? 'bur' : 'ru'}`;
 
     try {
       if (requestWasSentWithTheText.current) {
@@ -68,7 +71,7 @@ export default function Home() {
       }
 
       setLoading(true);
-      const data = await translateWord(translationType, text);
+      const data = await translateWord(translationType.current, text);
 
       requestWasSentWithTheText.current = true;
       setOutputData(data);
@@ -82,6 +85,32 @@ export default function Home() {
       setLoading(false);
     }
   }
+
+  const handleFavorites = useCallback(
+    async (data) => {
+      const key = data[0].name;
+      const value = JSON.stringify({
+        id: data[0].translations[0].id,
+        translation: data[0].translations[0].name.trim(),
+        translationType: translationType.current,
+      });
+
+      console.log(key, value);
+
+      try {
+        if (isFavorite) {
+          await AsyncStorage.removeItem(key);
+          setFavorite(false);
+        } else {
+          await AsyncStorage.setItem(key, value);
+          setFavorite(true);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [outputData],
+  );
 
   return (
     <ScrollView
@@ -100,21 +129,23 @@ export default function Home() {
               <ActivityIndicator color="#fff" style={{ marginLeft: 10 }} />
             )}
 
-            <Pressable
-              onPress={() => setFavorite(!isFavorite)}
-              style={{ marginLeft: 'auto' }}
-            >
-              <Star
-                style={{
-                  width: 18,
-                  height: 18,
-                  fill: isFavorite ? colors.yellow : colors.neutral400,
-                }}
-                activeStyle={{
-                  fill: isFavorite ? colors.yellow : 'transparent',
-                }}
-              />
-            </Pressable>
+            {outputData?.result && (
+              <Pressable
+                onPress={handleFavorites.bind(null, outputData.result)}
+                style={{ marginLeft: 'auto' }}
+              >
+                <Star
+                  style={{
+                    width: 18,
+                    height: 18,
+                    fill: isFavorite ? colors.yellow : colors.neutral400,
+                  }}
+                  activeStyle={{
+                    fill: isFavorite ? colors.yellow : 'transparent',
+                  }}
+                />
+              </Pressable>
+            )}
           </Navbar>
 
           <View style={styles.container}>
@@ -142,11 +173,7 @@ export default function Home() {
             <TouchableHighlight
               disabled={isLoading}
               activeOpacity={0.9}
-              style={{
-                marginTop: 10,
-                borderRadius: 10,
-                overflow: 'hidden',
-              }}
+              className="mt-2.5 rounded-lg overflow-hidden"
               onPress={translate}
             >
               <View

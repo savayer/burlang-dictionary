@@ -16,19 +16,18 @@ const iconWidth = 20;
 export default function Navigation() {
   const navItems = [
     {
-      name: i18n.t('search'),
+      name: 'Home',
       component: Home,
       options: {
         tabBarIcon: ({ color }) => (
           <Search width={iconWidth} height={iconHeight} stroke={color} />
         ),
-        title: '',
         tabBarLabel: i18n.t('search').toLowerCase(),
-        header: () => null,
+        headerShown: false,
       },
     },
     {
-      name: i18n.t('favorites'),
+      name: 'Favorites',
       component: Favorites,
       options: {
         tabBarIcon: ({ color }) => (
@@ -39,10 +38,11 @@ export default function Navigation() {
           />
         ),
         tabBarLabel: i18n.t('favorites').toLowerCase(),
+        headerShown: false,
       },
     },
     {
-      name: i18n.t('information'),
+      name: 'Information',
       component: Settings,
       options: {
         // @todo it can be rewritten with TW completely
@@ -54,6 +54,7 @@ export default function Navigation() {
           />
         ),
         tabBarLabel: i18n.t('information').toLowerCase(),
+        headerShown: false,
       },
     },
   ];

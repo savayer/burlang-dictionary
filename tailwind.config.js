@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors: {
         'bur-blue': '#0036a7',
+        'bur-yellow': '#f1b742',
       },
     },
   },
