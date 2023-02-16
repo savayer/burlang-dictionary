@@ -6,27 +6,25 @@ import {
   ActivityIndicator,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
-  TouchableHighlight,
   Pressable,
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import List from '../components/List';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import appStyles from '../constants/styles';
 import { useRef, useState } from 'react';
 import { translateWord } from '../actions/translate';
 import i18n from '../constants/i18n';
-import colors from '../constants/colors';
 import { Exchange, Star } from '../components/icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import classNames from '../utils/classNames';
 
 export default function Home({ route }) {
   const [lang, setLang] = useState('ru');
   const [text, setText] = useState('');
   const requestWasSentWithTheText = useRef(false);
   const clicksNumber = useRef(0);
+  const searchingFavoritesIndex = useRef(0);
   const translationType = useRef(`${lang}2${lang === 'ru' ? 'bur' : 'ru'}`);
   const [isLoading, setLoading] = useState(false);
   const [outputData, setOutputData] = useState();
@@ -52,8 +50,9 @@ export default function Home({ route }) {
   useEffect(() => {
     if (route.params?.translation?.type) {
       setLang(route.params.translation.type.split('2')[0]);
-      setText(route.params.translation.key);
+      setText(route.params.translation.key.toLowerCase());
       requestWasSentWithTheText.current = false;
+      searchingFavoritesIndex.current++;
       // we can't use translate method here because setState is asynchronous
       // translate().catch((e) => console.error('search favorite word error', e));
     }
@@ -63,7 +62,7 @@ export default function Home({ route }) {
     if (route.params?.translation?.type) {
       translate().catch((e) => console.error('search favorite word error', e));
     }
-  }, [text]);
+  }, [searchingFavoritesIndex.current]);
 
   async function translate() {
     if (text.trim() === '') {
@@ -111,7 +110,7 @@ export default function Home({ route }) {
 
   const handleFavorites = useCallback(
     async (data) => {
-      const key = data[0].name;
+      const key = data[0].name.toLowerCase();
       const value = JSON.stringify({
         id: data[0].translations[0].id,
         translation: data[0].translations[0].name.trim(),
@@ -122,11 +121,9 @@ export default function Home({ route }) {
         if (isFavorite) {
           await AsyncStorage.removeItem(key);
           setFavorite(false);
-          console.log('removed');
         } else {
           await AsyncStorage.setItem(key, value);
           setFavorite(true);
-          console.log('added');
         }
       } catch (e) {
         console.error(e);
@@ -136,17 +133,12 @@ export default function Home({ route }) {
   );
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ minHeight: '100%' }}
-    >
-      <SafeAreaView
-        style={{
-          paddingBottom: 10,
-          height: '100%',
-        }}
+    <SafeAreaView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ minHeight: '100%' }}
       >
-        <View style={styles.wrapper}>
+        <View className="flex-1 bg-white">
           <Navbar title={i18n.t(`app_name_${lang}`)}>
             {isLoading && (
               <ActivityIndicator color="#fff" style={{ marginLeft: 10 }} />
@@ -155,26 +147,25 @@ export default function Home({ route }) {
             {outputData?.result && outputData.result[0]?.name !== '-' && (
               <Pressable
                 onPress={handleFavorites.bind(null, outputData.result)}
-                style={{ marginLeft: 'auto' }}
+                className="ml-auto"
               >
                 <Star
-                  style={{
-                    width: 18,
-                    height: 18,
-                    fill: isFavorite ? colors.yellow : colors.neutral400,
-                  }}
-                  activeStyle={{
-                    fill: isFavorite ? colors.yellow : 'transparent',
-                  }}
+                  className={classNames(
+                    'w-5 h-5',
+                    isFavorite ? 'fill-bur-yellow' : 'fill-neutral-400',
+                  )}
+                  activeClassName={
+                    isFavorite ? 'fill-bur-yellow' : 'fill-transparent'
+                  }
                 />
               </Pressable>
             )}
           </Navbar>
 
-          <View style={styles.container}>
-            <View style={{ position: 'relative' }}>
+          <View className="px-2.5 pb-2.5 -mt-4 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
+            <View className="relative">
               <TextInput
-                style={styles.input}
+                className="mt-5 p-2.5 pr-10 border border-neutral-400 rounded-md"
                 placeholder={i18n.t(`input_placeholder_${lang}`)}
                 value={text}
                 onChangeText={(inputText) => {
@@ -185,30 +176,30 @@ export default function Home({ route }) {
 
               <TouchableOpacity
                 activeOpacity={0.6}
-                style={styles.langSwitcher}
+                className="absolute right-2 top-1/2"
                 onPress={switchLanguage}
               >
-                {/*@todo replace it with flags*/}
-                <Exchange width={20} height={20} fill={colors.blue} />
+                <Exchange className="w-5 h-5 fill-bur-blue" />
               </TouchableOpacity>
             </View>
 
-            <TouchableHighlight
+            <TouchableOpacity
               disabled={isLoading}
-              activeOpacity={0.9}
+              activeOpacity={0.8}
               className="mt-2.5 rounded-lg overflow-hidden"
               onPress={translate}
             >
               <View
-                style={
-                  isLoading
-                    ? { ...styles.button, backgroundColor: colors.neutral300 }
-                    : styles.button
-                }
+                className={classNames(
+                  'bg-bur-yellow rounded-xl h-10 justify-center shadow',
+                  isLoading && 'bg-neutral-300',
+                )}
               >
-                <Text style={styles.buttonText}>{i18n.t('translate')}</Text>
+                <Text className="text-white font-bold text-center text-base">
+                  {i18n.t('translate')}
+                </Text>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
 
             {outputData && (
               <>
@@ -230,9 +221,7 @@ export default function Home({ route }) {
             )}
           </View>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create(appStyles);

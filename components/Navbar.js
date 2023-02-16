@@ -1,27 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import colors from '../constants/colors';
+import { View, Text } from 'react-native';
 
 export default function Navbar({ title, children }) {
   return (
-    <View style={styles.navbar}>
-      <Text style={styles.title}>{title}</Text>
+    <View className="pt-4 pb-7 px-2.5 flex-row items-center bg-bur-blue">
+      <Text className="text-lg text-white font-medium">{title}</Text>
+
       {children}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  navbar: {
-    backgroundColor: colors.blue,
-    paddingTop: 15,
-    paddingBottom: 25,
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 20,
-    color: 'white',
-  },
-});

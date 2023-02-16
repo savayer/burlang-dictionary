@@ -7,7 +7,7 @@ import colors from './constants/colors';
 export default function App() {
   return (
     <>
-      <StatusBar style="light" backgroundColor={colors.blue} />
+      <StatusBar backgroundColor={colors.blue} />
 
       <NavigationContainer>
         <Navigation />

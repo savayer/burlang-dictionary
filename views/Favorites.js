@@ -1,17 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableHighlight,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../constants/colors';
 import i18n from '../constants/i18n';
-import { useNavigation } from '@react-navigation/native';
 import groupBy from '../utils/groupBy';
 import ScreenHeader from '../components/ScreenHeader';
 
