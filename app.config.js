@@ -25,7 +25,7 @@ module.exports = {
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#FFFFFF',
       },
-      package: 'savayer.burlang_dictionary',
+      package: 'com.burlang.dictionary',
     },
     web: {
       favicon: './assets/favicon.png',

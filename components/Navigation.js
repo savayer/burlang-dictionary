@@ -67,7 +67,6 @@ export default function Navigation() {
         tabBarActiveBackgroundColor: colors.neutral100,
         tabBarLabelStyle: {
           fontSize: 12,
-          fontFamily: 'sans-serif',
           fontWeight: 'bold',
         },
         tabBarStyle: { marginTop: -10 },

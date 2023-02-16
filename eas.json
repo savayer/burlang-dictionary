@@ -7,18 +7,15 @@
       "developmentClient": true,
       "distribution": "internal"
     },
-    "preview": {
+    "apk": {
       "android": {
         "buildType": "apk"
       }
     },
-    "preview2": {
+    "aab": {
       "android": {
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "app-bundle"
       }
-    },
-    "preview3": {
-      "developmentClient": true
     },
     "production": {}
   },
