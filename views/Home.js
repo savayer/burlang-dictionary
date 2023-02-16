@@ -162,7 +162,7 @@ export default function Home({ route }) {
             )}
           </Navbar>
 
-          <View className="px-2.5 pb-2.5 -mt-4 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
+          <View className="px-2.5 pb-2.5 -mt-4 flex-1 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
             <View className="relative">
               <TextInput
                 className="mt-5 p-2.5 pr-10 border border-neutral-400 rounded-md"
