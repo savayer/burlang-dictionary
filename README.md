@@ -1,6 +1,6 @@
 # Buryad language dictionary
 
-Expired by [burlang.ru](https://burlang.ru/) and [this app](https://play.google.com/store/apps/details?id=com.buryads.orshuulga_mobile).
+Inspired by [burlang.ru](https://burlang.ru/) and [this app](https://play.google.com/store/apps/details?id=com.buryads.orshuulga_mobile).
 
 This is my practice and wish to get more comfortable app
 and make a small contribution to the study of the Buryad language.
@@ -44,10 +44,10 @@ This app based on [expo](https://expo.dev/).
 
 ### Colors
 
-Main colors are specified in `./tailwind.config.js'.
+Main colors are specified in `./tailwind.config.js`.
 There are only two main colors in the Buryat flag, blue and yellow.
 
-There is also `./constants/colors.js' in case it's not possible
+There is also `./constants/colors.js` in case it's not possible
 to use Tailwind classes. But it's better not to use it frequently.
 
 ### Icons
