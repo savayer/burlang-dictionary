@@ -18,38 +18,41 @@ import i18n from '../constants/i18n';
 import { Exchange, Star } from '../components/icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import classNames from '../utils/classNames';
+import { useFetchData } from '../components/hooks/useFetchData';
 
 export default function Home({ route }) {
-  const [lang, setLang] = useState('ru');
+  const [sourceLanguage, setSourceLanguage] = useState('ru');
   const [text, setText] = useState('');
   const requestWasSentWithTheText = useRef(false);
   const clicksNumber = useRef(0);
   const searchingFavoritesIndex = useRef(0);
-  const translationType = useRef(`${lang}2${lang === 'ru' ? 'bur' : 'ru'}`);
-  const [isLoading, setLoading] = useState(false);
-  const [outputData, setOutputData] = useState();
+  const translationType = useRef(
+    `${sourceLanguage}2${sourceLanguage === 'ru' ? 'bur' : 'ru'}`,
+  );
   const [isFavorite, setFavorite] = useState(false);
 
+  const {
+    isLoading,
+    result: outputData,
+    handleReset,
+    handleResponse: handleTranslate,
+  } = useFetchData([], translateWord);
+
   function switchLanguage() {
-    setLang(lang === 'ru' ? 'bur' : 'ru');
+    setSourceLanguage(sourceLanguage === 'ru' ? 'bur' : 'ru');
     setText('');
-    setOutputData(null);
+    handleReset();
   }
 
-  const alertNoText = () =>
-    Alert.alert(
-      i18n.t('no_text_to_translate'),
-      i18n.t('no_text_to_translate_description'),
-      [{ text: 'OK' }],
-    );
-
   useEffect(() => {
-    translationType.current = `${lang}2${lang === 'ru' ? 'bur' : 'ru'}`;
-  }, [lang]);
+    translationType.current = `${sourceLanguage}2${
+      sourceLanguage === 'ru' ? 'bur' : 'ru'
+    }`;
+  }, [sourceLanguage]);
 
   useEffect(() => {
     if (route.params?.translation?.type) {
-      setLang(route.params.translation.type.split('2')[0]);
+      setSourceLanguage(route.params.translation.type.split('2')[0]);
       setText(route.params.translation.key.toLowerCase());
       requestWasSentWithTheText.current = false;
       searchingFavoritesIndex.current++;
@@ -60,35 +63,38 @@ export default function Home({ route }) {
 
   useEffect(() => {
     if (route.params?.translation?.type) {
-      translate().catch((e) => console.error('search favorite word error', e));
+      onPressHandler().catch((e) =>
+        console.error('search favorite word error', e),
+      );
     }
   }, [searchingFavoritesIndex.current]);
 
-  async function translate() {
+  async function onPressHandler() {
     if (text.trim() === '') {
-      alertNoText();
+      Alert.alert(
+        i18n.t('no_text_to_translate'),
+        i18n.t('no_text_to_translate_description'),
+        [{ text: 'OK' }],
+      );
+      return;
+    }
+
+    if (requestWasSentWithTheText.current) {
+      clicksNumber.current++;
+
+      if (clicksNumber.current === 3) {
+        Alert.alert(`${i18n.t('calm')}!`, i18n.t('you_have_the_translations'), [
+          { text: 'ОК' },
+        ]);
+        clicksNumber.current = 0;
+      }
       return;
     }
 
     setFavorite(false);
 
     try {
-      if (requestWasSentWithTheText.current) {
-        clicksNumber.current++;
-
-        if (clicksNumber.current === 3) {
-          Alert.alert(
-            `${i18n.t('calm')}!`,
-            i18n.t('you_have_the_translations'),
-            [{ text: 'ОК' }],
-          );
-          clicksNumber.current = 0;
-        }
-        return;
-      }
-
-      setLoading(true);
-      const data = await translateWord(translationType.current, text);
+      await handleTranslate(translationType.current, text);
       const theTextFromStore = await AsyncStorage.getItem(text.toLowerCase());
 
       if (theTextFromStore) {
@@ -96,15 +102,12 @@ export default function Home({ route }) {
       }
 
       requestWasSentWithTheText.current = true;
-      setOutputData(data);
     } catch (error) {
       console.error(error);
 
       Alert.alert(i18n.t('error'), i18n.t('something_went_wrong'), [
         { text: 'OK' },
       ]);
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -126,100 +129,89 @@ export default function Home({ route }) {
           setFavorite(true);
         }
       } catch (e) {
-        console.error(e);
+        Alert.alert(i18n.t('error'), i18n.t('something_went_wrong'), [
+          { text: 'OK' },
+        ]);
       }
     },
     [outputData, isFavorite],
   );
 
   return (
-    <SafeAreaView>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ minHeight: '100%' }}
-      >
-        <View className="flex-1 bg-white">
-          <Navbar title={i18n.t(`app_name_${lang}`)}>
-            {isLoading && (
-              <ActivityIndicator color="#fff" style={{ marginLeft: 10 }} />
-            )}
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView>
+        <Navbar title={i18n.t(`app_name_${sourceLanguage}`)}>
+          {isLoading && <ActivityIndicator color="#fff" className="ml-2.5" />}
 
-            {outputData?.result && outputData.result[0]?.name !== '-' && (
-              <Pressable
-                onPress={handleFavorites.bind(null, outputData.result)}
-                className="ml-auto"
-              >
-                <Star
-                  className={classNames(
-                    'w-5 h-5',
-                    isFavorite ? 'fill-bur-yellow' : 'fill-neutral-400',
-                  )}
-                  activeClassName={
-                    isFavorite ? 'fill-bur-yellow' : 'fill-transparent'
-                  }
-                />
-              </Pressable>
-            )}
-          </Navbar>
-
-          <View className="px-2.5 pb-2.5 -mt-4 flex-1 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
-            <View className="relative">
-              <TextInput
-                className="mt-5 p-2.5 pr-10 border border-neutral-400 rounded-md"
-                placeholder={i18n.t(`input_placeholder_${lang}`)}
-                value={text}
-                onChangeText={(inputText) => {
-                  setText(inputText);
-                  requestWasSentWithTheText.current = false;
-                }}
+          {outputData?.result && outputData.result[0]?.name !== '-' && (
+            <Pressable
+              onPress={handleFavorites.bind(null, outputData.result)}
+              className="ml-auto"
+            >
+              <Star
+                className={classNames(
+                  'w-5 h-5',
+                  isFavorite ? 'fill-bur-yellow' : 'fill-neutral-400',
+                )}
+                activeClassName={
+                  isFavorite ? 'fill-bur-yellow' : 'fill-transparent'
+                }
               />
+            </Pressable>
+          )}
+        </Navbar>
 
-              <TouchableOpacity
-                activeOpacity={0.6}
-                className="absolute right-2 top-1/2"
-                onPress={switchLanguage}
-              >
-                <Exchange className="w-5 h-5 fill-bur-blue" />
-              </TouchableOpacity>
-            </View>
+        <View className="px-2.5 pb-2.5 -mt-4 flex-1 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
+          <View className="relative">
+            <TextInput
+              className="mt-5 p-2.5 pr-10 border border-neutral-400 rounded-md"
+              placeholder={i18n.t(`input_placeholder_${sourceLanguage}`)}
+              value={text}
+              onChangeText={(inputText) => {
+                setText(inputText);
+                requestWasSentWithTheText.current = false;
+              }}
+            />
 
             <TouchableOpacity
-              disabled={isLoading}
-              activeOpacity={0.8}
-              className="mt-2.5 rounded-lg overflow-hidden"
-              onPress={translate}
+              activeOpacity={0.6}
+              className="absolute right-2 top-1/2"
+              onPress={switchLanguage}
             >
-              <View
-                className={classNames(
-                  'bg-bur-yellow rounded-xl h-10 justify-center shadow',
-                  isLoading && 'bg-neutral-300',
-                )}
-              >
-                <Text className="text-white font-bold text-center text-base">
-                  {i18n.t('translate')}
-                </Text>
-              </View>
+              <Exchange className="w-5 h-5 fill-bur-blue" />
             </TouchableOpacity>
-
-            {outputData && (
-              <>
-                <List
-                  items={outputData.result}
-                  title={i18n.t('translations')}
-                />
-
-                <List
-                  items={outputData.include}
-                  title={i18n.t('occurrences')}
-                />
-
-                <List
-                  items={outputData.fuzzy}
-                  title={i18n.t('possible_translations')}
-                />
-              </>
-            )}
           </View>
+
+          <TouchableOpacity
+            disabled={isLoading}
+            activeOpacity={0.8}
+            className="mt-2.5 rounded-lg overflow-hidden"
+            onPress={onPressHandler}
+          >
+            <View
+              className={classNames(
+                'bg-bur-yellow rounded-xl h-10 justify-center shadow',
+                isLoading && 'bg-neutral-300',
+              )}
+            >
+              <Text className="text-white font-bold text-center text-base">
+                {i18n.t('translate')}
+              </Text>
+            </View>
+          </TouchableOpacity>
+
+          {outputData && (
+            <>
+              <List items={outputData.result} title={i18n.t('translations')} />
+
+              <List items={outputData.include} title={i18n.t('occurrences')} />
+
+              <List
+                items={outputData.fuzzy}
+                title={i18n.t('possible_translations')}
+              />
+            </>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
