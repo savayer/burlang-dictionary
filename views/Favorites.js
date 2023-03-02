@@ -1,11 +1,19 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableHighlight } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableHighlight,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../constants/colors';
 import i18n from '../constants/i18n';
 import groupBy from '../utils/groupBy';
 import ScreenHeader from '../components/ScreenHeader';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 async function getAllKeys() {
   let keys = [];
@@ -27,29 +35,32 @@ async function getAllValues(keys) {
   }
 }
 
+const loadFavorites = async () => {
+  const keys = await getAllKeys();
+  const data = await getAllValues(keys);
+
+  const parsedArray = data.map(([key, value]) => {
+    const parsedData = JSON.parse(value);
+
+    return {
+      key,
+      value: parsedData.translation,
+      type: parsedData.translationType,
+    };
+  });
+
+  return groupBy(parsedArray, 'type');
+};
+
 export default function Favorites({ navigation }) {
   const [favorites, setFavorites] = useState();
 
-  const init = useCallback(async () => {
-    const keys = await getAllKeys();
-
-    return await getAllValues(keys);
-  }, []);
-
+  /*
+   * Load favorites by open the screen
+   * */
   useEffect(() => {
     navigation.addListener('focus', () => {
-      init().then((data) => {
-        const parsedArray = data.map(([key, value]) => {
-          const parsedData = JSON.parse(value);
-          return {
-            key,
-            value: parsedData.translation,
-            type: parsedData.translationType,
-          };
-        });
-
-        setFavorites(groupBy(parsedArray, 'type'));
-      });
+      loadFavorites().then((data) => setFavorites(data));
     });
   }, []);
 
@@ -58,6 +69,33 @@ export default function Favorites({ navigation }) {
       translation,
     });
   }
+
+  async function deleteWordFromFavorites(type, key) {
+    try {
+      await AsyncStorage.removeItem(key);
+      const favorites = await loadFavorites();
+
+      setFavorites(favorites);
+    } catch (e) {
+      console.error(e);
+      Alert.alert(i18n.t('error'), i18n.t('something_went_wrong'), [
+        { text: 'OK' },
+      ]);
+    }
+  }
+
+  const DeleteButton = useCallback(
+    (type, word) => (
+      <TouchableOpacity
+        activeOpacity={0.9}
+        className="bg-bur-blue py-2 px-4 my-1 rounded"
+        onPress={() => deleteWordFromFavorites(type, word)}
+      >
+        <Text className="text-white m-auto font-bold">Удалить</Text>
+      </TouchableOpacity>
+    ),
+    [],
+  );
 
   return (
     <ScrollView>
@@ -102,22 +140,35 @@ export default function Favorites({ navigation }) {
 
                 <View className="px-2">
                   {favorites[type].map((translation, i) => (
-                    <TouchableHighlight
-                      underlayColor={colors.neutral100}
-                      className="px-2 my-1"
-                      onPress={searchFavoriteWord.bind(null, translation)}
+                    <Swipeable
                       key={i}
+                      renderLeftActions={DeleteButton.bind(
+                        null,
+                        type,
+                        translation.key,
+                      )}
+                      renderRightActions={DeleteButton.bind(
+                        null,
+                        type,
+                        translation.key,
+                      )}
                     >
-                      <>
-                        <View className="border-b border-neutral-300 py-1">
-                          <Text className="font-bold">
-                            {translation.key.toLowerCase()}
-                          </Text>
-                        </View>
+                      <TouchableHighlight
+                        underlayColor={colors.neutral100}
+                        className="px-2 my-1 bg-white"
+                        onPress={searchFavoriteWord.bind(null, translation)}
+                      >
+                        <>
+                          <View className="border-b border-neutral-300 py-1">
+                            <Text className="font-bold">
+                              {translation.key.toLowerCase()}
+                            </Text>
+                          </View>
 
-                        <Text>{translation.value}</Text>
-                      </>
-                    </TouchableHighlight>
+                          <Text>{translation.value}</Text>
+                        </>
+                      </TouchableHighlight>
+                    </Swipeable>
                   ))}
                 </View>
               </View>
@@ -126,17 +177,5 @@ export default function Favorites({ navigation }) {
         )}
       </SafeAreaView>
     </ScrollView>
-  );
-}
-
-function Translation({ item }) {
-  return (
-    <View className="mb-2">
-      <View className="border-b border-neutral-300 py-2">
-        <Text className="font-bold">{item.key.toLowerCase()}</Text>
-      </View>
-
-      <Text>{item.value}</Text>
-    </View>
   );
 }

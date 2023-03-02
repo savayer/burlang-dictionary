@@ -78,7 +78,6 @@ export default function Home({ route }) {
       );
       return;
     }
-
     if (requestWasSentWithTheText.current) {
       clicksNumber.current++;
 
