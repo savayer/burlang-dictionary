@@ -13,7 +13,11 @@ import Navbar from '../components/Navbar';
 import List from '../components/List';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRef, useState } from 'react';
-import { translateWord } from '../actions/translate';
+import {
+  TranslateWord,
+  translateWord,
+  translation,
+} from '../actions/translate';
 import i18n from '../constants/i18n';
 import { Exchange, Star } from '../components/icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,7 +40,12 @@ export default function Home({ route }) {
     result: outputData,
     handleReset,
     handleResponse: handleTranslate,
-  } = useFetchData([], translateWord);
+  } = useFetchData([], translateWord) as {
+    isLoading: boolean;
+    result: translation;
+    handleReset: () => void;
+    handleResponse: TranslateWord;
+  };
 
   function switchLanguage() {
     setSourceLanguage(sourceLanguage === 'ru' ? 'bur' : 'ru');
@@ -142,22 +151,26 @@ export default function Home({ route }) {
         <Navbar title={i18n.t(`app_name_${sourceLanguage}`)}>
           {isLoading && <ActivityIndicator color="#fff" className="ml-2.5" />}
 
-          {outputData?.result && outputData.result[0]?.name !== '-' && (
-            <Pressable
-              onPress={handleFavorites.bind(null, outputData.result)}
-              className="ml-auto"
-            >
-              <Star
-                className={classNames(
-                  'w-5 h-5',
-                  isFavorite ? 'fill-bur-yellow' : 'fill-neutral-400',
+          {outputData.exactTranslations &&
+            outputData.exactTranslations[0].name !== '-' && (
+              <Pressable
+                onPress={handleFavorites.bind(
+                  null,
+                  outputData.exactTranslations,
                 )}
-                activeClassName={
-                  isFavorite ? 'fill-bur-yellow' : 'fill-transparent'
-                }
-              />
-            </Pressable>
-          )}
+                className="ml-auto"
+              >
+                <Star
+                  className={classNames(
+                    'w-5 h-5',
+                    isFavorite ? 'fill-bur-yellow' : 'fill-neutral-400',
+                  )}
+                  activeClassName={
+                    isFavorite ? 'fill-bur-yellow' : 'fill-transparent'
+                  }
+                />
+              </Pressable>
+            )}
         </Navbar>
 
         <View className="px-2.5 pb-2.5 -mt-4 flex-1 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
@@ -201,12 +214,18 @@ export default function Home({ route }) {
 
           {outputData && (
             <>
-              <List items={outputData.result} title={i18n.t('translations')} />
-
-              <List items={outputData.include} title={i18n.t('occurrences')} />
+              <List
+                items={outputData.exactTranslations}
+                title={i18n.t('translations')}
+              />
 
               <List
-                items={outputData.fuzzy}
+                items={outputData.occurrences}
+                title={i18n.t('occurrences')}
+              />
+
+              <List
+                items={outputData.possibleTranslation}
                 title={i18n.t('possible_translations')}
               />
             </>
