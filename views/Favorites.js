@@ -98,84 +98,78 @@ export default function Favorites({ navigation }) {
   );
 
   return (
-    <ScrollView>
-      <SafeAreaView className="min-h-screen bg-white">
-        <ScreenHeader
-          className="mb-0"
-          showBackButton={false}
-          title={i18n.t('favorites')}
-        />
+    <View className="flex-1 bg-white">
+      {!favorites || Object.keys(favorites).length === 0 ? (
+        <View className="m-auto">
+          <Text className="text-lg font-bold">Нет избранных слов</Text>
+          <TouchableHighlight
+            activeOpacity={0.9}
+            className="mt-2.5 rounded-lg overflow-hidden"
+            onPress={() => navigation.navigate('Home')}
+          >
+            <View className="bg-bur-yellow px-2 py-2">
+              <Text className="text-center text-white text-base font-bold">
+                Искать слова
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
+      ) : (
+        <ScrollView>
+          {favorites && Object.keys(favorites).length > 0 && (
+            <View>
+              {Object.keys(favorites).map((type) => (
+                <View key={type} className="mb-6">
+                  <View
+                    className="bg-bur-yellow px-4 py-2"
+                    style={{ backgroundColor: '#f1b742' }}
+                  >
+                    <Text className="text-white font-bold">
+                      {type === 'ru2bur'
+                        ? 'Русский > Бурятский'
+                        : 'Бурятский > Русский'}
+                    </Text>
+                  </View>
 
-        {(!favorites || Object.keys(favorites).length === 0) && (
-          <View className="m-auto">
-            <Text className="text-lg font-bold">Нет избранных слов</Text>
-            <TouchableHighlight
-              activeOpacity={0.9}
-              className="mt-2.5 rounded-lg overflow-hidden"
-              onPress={() => navigation.navigate('Home')}
-            >
-              <View className="bg-bur-yellow px-2 py-2">
-                <Text className="text-center text-white text-base font-bold">
-                  Искать слова
-                </Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-        )}
-
-        {favorites && Object.keys(favorites).length > 0 && (
-          <View>
-            {Object.keys(favorites).map((type) => (
-              <View key={type} className="mb-6">
-                <View
-                  className="bg-bur-yellow px-4 py-2"
-                  style={{ backgroundColor: '#f1b742' }}
-                >
-                  <Text className="text-white font-bold">
-                    {type === 'ru2bur'
-                      ? 'Русский > Бурятский'
-                      : 'Бурятский > Русский'}
-                  </Text>
-                </View>
-
-                <View className="px-2">
-                  {favorites[type].map((translation, i) => (
-                    <Swipeable
-                      key={i}
-                      renderLeftActions={DeleteButton.bind(
-                        null,
-                        type,
-                        translation.key,
-                      )}
-                      renderRightActions={DeleteButton.bind(
-                        null,
-                        type,
-                        translation.key,
-                      )}
-                    >
-                      <TouchableHighlight
-                        underlayColor={colors.neutral100}
-                        className="px-2 my-1 bg-white"
-                        onPress={searchFavoriteWord.bind(null, translation)}
+                  <View className="px-2">
+                    {favorites[type].map((translation, i) => (
+                      <Swipeable
+                        key={i}
+                        renderLeftActions={DeleteButton.bind(
+                          null,
+                          type,
+                          translation.key,
+                        )}
+                        renderRightActions={DeleteButton.bind(
+                          null,
+                          type,
+                          translation.key,
+                        )}
                       >
-                        <>
-                          <View className="border-b border-neutral-300 py-1">
-                            <Text className="font-bold">
-                              {translation.key.toLowerCase()}
-                            </Text>
-                          </View>
+                        <TouchableHighlight
+                          underlayColor={colors.neutral100}
+                          className="px-2 my-1 bg-white"
+                          onPress={searchFavoriteWord.bind(null, translation)}
+                        >
+                          <>
+                            <View className="border-b border-neutral-300 py-1">
+                              <Text className="font-bold">
+                                {translation.key.toLowerCase()}
+                              </Text>
+                            </View>
 
-                          <Text>{translation.value}</Text>
-                        </>
-                      </TouchableHighlight>
-                    </Swipeable>
-                  ))}
+                            <Text>{translation.value}</Text>
+                          </>
+                        </TouchableHighlight>
+                      </Swipeable>
+                    ))}
+                  </View>
                 </View>
-              </View>
-            ))}
-          </View>
-        )}
-      </SafeAreaView>
-    </ScrollView>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+      )}
+    </View>
   );
 }

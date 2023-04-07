@@ -18,14 +18,8 @@ export default function Settings() {
   ];
 
   return (
-    <ScrollView keyboardShouldPersistTaps="handled">
-      <SafeAreaView className="min-h-screen bg-white">
-        <ScreenHeader
-          className="mb-0"
-          showBackButton={false}
-          title={i18n.t('information')}
-        />
-
+    <View className="flex-1 bg-white">
+      <ScrollView>
         <View className="px-4">
           {webPages.map((page, i) => (
             <View key={i} className="py-3 border-b border-neutral-200">
@@ -42,7 +36,7 @@ export default function Settings() {
             <Text className="font-mont-medium text-sm">version 0.0.1</Text>
           </View>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
