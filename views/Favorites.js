@@ -7,12 +7,10 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../constants/colors';
 import i18n from '../constants/i18n';
 import groupBy from '../utils/groupBy';
-import ScreenHeader from '../components/ScreenHeader';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 async function getAllKeys() {

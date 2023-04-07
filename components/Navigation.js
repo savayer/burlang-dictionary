@@ -3,21 +3,40 @@ import Home from '../views/Home';
 import Favorites from '../views/Favorites';
 import Settings from '../views/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Search, FolderWithStar, Tuning } from './icons';
+import { Search, FolderWithStar } from './icons';
 import i18n from '../constants/i18n';
 import { TouchableOpacity } from 'react-native';
 import colors from '../constants/colors';
 import { Info } from './icons/Info';
+import FadeInView from './FadeInView';
 
 const Tab = createBottomTabNavigator();
 const iconHeight = 20;
 const iconWidth = 20;
 
+const FadeHome = (props) => (
+  <FadeInView>
+    <Home {...props} />
+  </FadeInView>
+);
+
+const FadeFavorites = (props) => (
+  <FadeInView>
+    <Favorites {...props} />
+  </FadeInView>
+);
+
+const FadeSettings = (props) => (
+  <FadeInView>
+    <Settings {...props} />
+  </FadeInView>
+);
+
 export default function Navigation() {
   const navItems = [
     {
       name: 'Home',
-      component: Home,
+      component: FadeHome,
       options: {
         tabBarIcon: ({ color }) => (
           <Search width={iconWidth} height={iconHeight} stroke={color} />
@@ -28,7 +47,7 @@ export default function Navigation() {
     },
     {
       name: 'Favorites',
-      component: Favorites,
+      component: FadeFavorites,
       options: {
         tabBarIcon: ({ color }) => (
           <FolderWithStar
@@ -43,7 +62,7 @@ export default function Navigation() {
     },
     {
       name: 'Information',
-      component: Settings,
+      component: FadeSettings,
       options: {
         // @todo it can be rewritten with TW completely
         tabBarIcon: ({ focused, color }) => (
@@ -54,6 +73,8 @@ export default function Navigation() {
           />
         ),
         title: 'Информация',
+        headerLargeStyle: true,
+        headerLargeTitle: 'Информация',
         tabBarLabel: i18n.t('information').toLowerCase(),
       },
     },
