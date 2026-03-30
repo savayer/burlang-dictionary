@@ -28,7 +28,7 @@ export default function Settings() {
           {webPages.map((page, i) => (
             <View key={i} className="py-3 border-b border-neutral-200">
               <Text
-                className="font-mont-medium text-sm"
+                className="font-mont-medium text-base"
                 onPress={() => WebBrowser.openBrowserAsync(page.link)}
               >
                 {page.title}
@@ -37,7 +37,7 @@ export default function Settings() {
           ))}
 
           <View className="py-3">
-            <Text className="font-mont-medium text-sm">version 0.0.1</Text>
+            <Text className="font-mont-medium text-base">version 1.0.0</Text>
           </View>
         </View>
       </ScrollView>

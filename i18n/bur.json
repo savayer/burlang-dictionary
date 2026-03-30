@@ -17,5 +17,14 @@
   "search": "Бэдэрэлгэ",
   "favorites": "Шэлэгдэмэл",
   "settings": "Тааруулга",
-  "information": "Мэдээсэл"
+  "information": "Мэдээсэл",
+  "quiz": "Викторина",
+  "results": "Дүнгүүд",
+  "your_answer": "Танай харюу",
+  "correct_answer": "Зүб харюу",
+  "try_again": "Дахин оролдохо",
+  "new_words": "Шэнэ үгэнүүд",
+  "correct_answers": "Зүб харюунууд",
+  "wrong_answers": "Буруу харюунууд",
+  "loading": "Ашаалжа байна..."
 }

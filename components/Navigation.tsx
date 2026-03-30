@@ -1,9 +1,10 @@
 import React from 'react';
 import Home from '@/views/Home';
 import Favorites from '@/views/Favorites';
+import Quiz from '@/views/Quiz';
 import Settings from '@/views/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import i18n from '@/constants/i18n';
 import { TouchableOpacity } from 'react-native';
 import colors from '@/constants/colors';
@@ -21,6 +22,12 @@ const FadeHome = (props: any) => (
 const FadeFavorites = (props: any) => (
   <FadeInView>
     <Favorites {...props} />
+  </FadeInView>
+);
+
+const FadeQuiz = (props: any) => (
+  <FadeInView>
+    <Quiz {...props} />
   </FadeInView>
 );
 
@@ -52,6 +59,18 @@ export default function Navigation() {
         ),
         title: 'Избранное',
         tabBarLabel: i18n.t('favorites').toLowerCase(),
+      },
+    },
+    {
+      name: 'Quiz',
+      component: FadeQuiz,
+      options: {
+        tabBarIcon: ({ color }: { color: string }) => (
+          <MaterialCommunityIcons name="head-question-outline" size={iconHeight} color={color} />
+        ),
+        title: i18n.t('quiz'),
+        tabBarLabel: i18n.t('quiz').toLowerCase(),
+        headerShown: false,
       },
     },
     {

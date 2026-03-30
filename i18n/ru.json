@@ -17,5 +17,14 @@
   "search": "Поиск",
   "favorites": "Избранное",
   "settings": "Настройки",
-  "information": "Информация"
+  "information": "Информация",
+  "quiz": "Викторина",
+  "results": "Результаты",
+  "your_answer": "Ваш ответ",
+  "correct_answer": "Правильный ответ",
+  "try_again": "Попробовать снова",
+  "new_words": "Новые слова",
+  "correct_answers": "Правильных ответов",
+  "wrong_answers": "Неправильных ответов",
+  "loading": "Загрузка..."
 }
