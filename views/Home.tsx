@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Alert,
   Pressable,
-  Platform,
 } from 'react-native';
 import Navbar from '@/components/Navbar';
 import List from '@/components/List';
@@ -21,6 +20,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { twMerge } from 'tailwind-merge';
 import { useFetchData } from '@/components/hooks/useFetchData';
 import { StatusBar } from 'expo-status-bar';
+import { LinearGradient } from 'expo-linear-gradient';
+import getShadow from '@/utils/getShadow';
 
 export default function Home({ route }) {
   const [sourceLanguage, setSourceLanguage] = useState('ru');
@@ -28,10 +29,6 @@ export default function Home({ route }) {
   const requestWasSentWithTheText = useRef(false);
   const clicksNumber = useRef(0);
   const searchingFavoritesIndex = useRef(0);
-  const [isScrollUp, setScrollUp] = useState(true);
-  const translationType = useRef(
-    `${sourceLanguage}2${sourceLanguage === 'ru' ? 'bur' : 'ru'}`,
-  );
   const [isFavorite, setFavorite] = useState(false);
   const insets = useSafeAreaInsets();
 
@@ -43,6 +40,10 @@ export default function Home({ route }) {
   } = useFetchData<translation, [string, string]>(
     [] as unknown as translation,
     translateWord,
+  );
+
+  const translationType = useRef(
+    `${sourceLanguage}2${sourceLanguage === 'ru' ? 'bur' : 'ru'}`,
   );
 
   function switchLanguage() {
@@ -63,8 +64,6 @@ export default function Home({ route }) {
       setText(route.params.translation.key.toLowerCase());
       requestWasSentWithTheText.current = false;
       searchingFavoritesIndex.current++;
-      // we can't use translate method here because setState is asynchronous
-      // translate().catch((e) => console.error('search favorite word error', e));
     }
   }, [route]);
 
@@ -143,114 +142,152 @@ export default function Home({ route }) {
     [outputData, isFavorite],
   );
 
-  function onScroll({
-    nativeEvent: {
-      contentOffset: { y: offsetTop },
-    },
-  }) {
-    if (offsetTop <= 0 && !isScrollUp) {
-      setScrollUp(true);
-    } else if (offsetTop > 0 && isScrollUp) {
-      setScrollUp(false);
-    }
-  }
+  const fromLang = i18n
+    .t(sourceLanguage === 'ru' ? 'russian' : 'buryat')
+    .toUpperCase();
+  const toLang = i18n
+    .t(sourceLanguage === 'ru' ? 'buryat' : 'russian')
+    .toUpperCase();
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-bur-bg">
       <StatusBar style="light" />
       <View style={{ height: insets.top }} className="bg-bur-blue" />
 
-      <View className="flex-1 bg-bur-blue">
-        <ScrollView
-          onScroll={onScroll}
-          scrollEventThrottle={16}
-          contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white' }}
-        >
-          {Platform.OS === 'ios' && (
-            <View className="bg-white h-[1000px] absolute left-0 right-0 -bottom-[1000px]" />
-          )}
+      <Navbar title={i18n.t(`app_name_${sourceLanguage}`)}>
+        {isLoading && <ActivityIndicator color="#ffffff" className="ml-2.5" />}
 
-          <Navbar title={i18n.t(`app_name_${sourceLanguage}`)}>
-            {isLoading && <ActivityIndicator color="#fff" className="ml-2.5" />}
-
-            {outputData.exactTranslations &&
-              outputData.exactTranslations[0].name !== '-' && (
-                <Pressable
-                  onPress={handleFavorites.bind(
-                    null,
-                    outputData.exactTranslations,
-                  )}
-                  className="ml-auto"
-                >
-                  <Ionicons
-                    name={isFavorite ? 'star' : 'star-outline'}
-                    size={20}
-                    color={isFavorite ? '#f1b742' : '#a3a3a3'}
-                  />
-                </Pressable>
-              )}
-          </Navbar>
-
-          <View className="px-2.5 pb-2.5 -mt-4 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
-            <View className="relative">
-              <TextInput
-                className="mt-5 p-2.5 pr-10 border border-neutral-400 rounded-md"
-                placeholder={i18n.t(`input_placeholder_${sourceLanguage}`)}
-                value={text}
-                onChangeText={(inputText) => {
-                  setText(inputText);
-                  requestWasSentWithTheText.current = false;
-                }}
+        {outputData.exactTranslations &&
+          outputData.exactTranslations[0].name !== '-' && (
+            <Pressable
+              onPress={handleFavorites.bind(null, outputData.exactTranslations)}
+              className="ml-auto"
+            >
+              <Ionicons
+                name={isFavorite ? 'star' : 'star-outline'}
+                size={22}
+                color={isFavorite ? '#f1b742' : 'rgba(255,255,255,0.5)'}
               />
+            </Pressable>
+          )}
+      </Navbar>
+
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-bur-bg">
+        <View className="px-4 pt-5 pb-4">
+          {/* Language Switcher */}
+          <View className="flex-row items-center justify-center mb-4">
+            <View
+              className="bg-white rounded-full flex-row items-center px-1 py-1"
+              style={getShadow(2, 2)}
+            >
+              <View className="flex-1 py-1.5">
+                <Text className="text-bur-blue font-bold text-sm text-center">
+                  {fromLang}
+                </Text>
+              </View>
 
               <TouchableOpacity
-                activeOpacity={0.6}
-                className="absolute right-2 top-1/2"
+                activeOpacity={0.7}
                 onPress={switchLanguage}
+                className="shrink-0 mx-1"
               >
-                <Ionicons name="swap-horizontal" size={20} color="#0036a7" />
+                <View className="bg-bur-yellow rounded-full p-1.5">
+                  <Ionicons name="swap-horizontal" size={18} color="#ffffff" />
+                </View>
               </TouchableOpacity>
-            </View>
 
-            <TouchableOpacity
-              disabled={isLoading}
-              activeOpacity={0.8}
-              className="mt-2.5 rounded-lg overflow-hidden"
-              onPress={onPressHandler}
-            >
-              <View
-                className={twMerge(
-                  'bg-bur-yellow rounded-xl h-10 justify-center shadow',
-                  isLoading && 'bg-neutral-300',
-                )}
+              <View className="flex-1 py-1.5">
+                <Text className="text-bur-blue font-bold text-sm text-center">
+                  {toLang}
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Search Input */}
+          <View
+            className="flex-row items-center bg-white border border-neutral-200 rounded-full px-4 py-0.5"
+            style={getShadow(1, 1)}
+          >
+            <Ionicons name="search" size={18} color="#a3a3a3" />
+            <TextInput
+              className="flex-1 ml-2.5 py-3 leading-5 text-base"
+              placeholder={i18n.t(`input_placeholder_${sourceLanguage}`)}
+              placeholderTextColor="#a3a3a3"
+              value={text}
+              onChangeText={(inputText) => {
+                setText(inputText);
+                requestWasSentWithTheText.current = false;
+              }}
+            />
+            {text.length > 0 && (
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  setText('');
+                  handleReset();
+                  requestWasSentWithTheText.current = false;
+                }}
               >
+                <Ionicons name="close-circle" size={18} color="#a3a3a3" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Translate Button */}
+          <TouchableOpacity
+            disabled={isLoading}
+            activeOpacity={0.8}
+            className="mt-3"
+            onPress={onPressHandler}
+          >
+            {isLoading ? (
+              <View className="bg-neutral-300 rounded-full h-12 justify-center">
                 <Text className="text-white font-bold text-center text-base">
                   {i18n.t('translate')}
                 </Text>
               </View>
-            </TouchableOpacity>
-
-            {outputData && (
-              <View>
-                <List
-                  items={outputData.exactTranslations}
-                  title={i18n.t('translations')}
-                />
-
-                <List
-                  items={outputData.occurrences}
-                  title={i18n.t('occurrences')}
-                />
-
-                <List
-                  items={outputData.possibleTranslation}
-                  title={i18n.t('possible_translations')}
-                />
-              </View>
+            ) : (
+              <LinearGradient
+                colors={['#f5c65c', '#f1b742']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ borderRadius: 9999, height: 48, justifyContent: 'center' }}
+              >
+                <Text className="text-bur-blue-dark font-bold text-center text-base">
+                  {i18n.t('translate')}
+                </Text>
+              </LinearGradient>
             )}
+          </TouchableOpacity>
+        </View>
+
+        {/* Results */}
+        {outputData && (
+          <View className="px-4 pb-6">
+            <List
+              items={outputData.exactTranslations}
+              title={i18n.t('translations')}
+              icon="checkmark-circle"
+              iconColor="#0036a7"
+            />
+
+            <List
+              items={outputData.occurrences}
+              title={i18n.t('occurrences')}
+              icon="layers"
+              iconColor="#f1b742"
+            />
+
+            <List
+              items={outputData.possibleTranslation}
+              title={i18n.t('possible_translations')}
+              icon="help-circle"
+              iconColor="#a3a3a3"
+            />
           </View>
-        </ScrollView>
-      </View>
+        )}
+      </ScrollView>
     </View>
   );
 }

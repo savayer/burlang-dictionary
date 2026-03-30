@@ -9,9 +9,10 @@ import i18n from '@/constants/i18n';
 import { TouchableOpacity } from 'react-native';
 import colors from '@/constants/colors';
 import FadeInView from './FadeInView';
+import getShadow from '@/utils/getShadow';
 
 const Tab = createBottomTabNavigator();
-const iconHeight = 20;
+const iconHeight = 22;
 
 const FadeHome = (props: any) => (
   <FadeInView>
@@ -96,14 +97,27 @@ export default function Navigation() {
     <Tab.Navigator
       id="MainTabs"
       screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.blue,
+          ...getShadow(6, 4),
+        },
+        headerTintColor: '#ffffff',
+        headerTitleStyle: {
+          fontWeight: '700',
+        },
+        headerShadowVisible: false,
         tabBarInactiveTintColor: colors.neutral400,
         tabBarActiveTintColor: colors.blue,
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: 'bold',
+          fontSize: 11,
+          fontWeight: '600',
         },
         tabBarItemStyle: {
           paddingVertical: 4,
+        },
+        tabBarStyle: {
+          borderTopWidth: 0,
+          ...getShadow(8, 4),
         },
         tabBarButton: (props) => (
           <TouchableOpacity activeOpacity={0.8} {...(props as any)} />
