@@ -2,9 +2,17 @@ module.exports = function (api) {
   api.cache(false);
 
   return {
-    presets: ['babel-preset-expo'],
-    plugins: [
+    presets: [
+      [
+        'babel-preset-expo',
+        {
+          jsxRuntime: 'automatic',
+          jsxImportSource: 'nativewind',
+        },
+      ],
       'nativewind/babel',
+    ],
+    plugins: [
       [
         'module:react-native-dotenv',
         {
@@ -13,6 +21,7 @@ module.exports = function (api) {
           path: '.env',
         },
       ],
+      'react-native-worklets/plugin',
     ],
   };
 };

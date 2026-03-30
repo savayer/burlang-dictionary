@@ -1,1 +1,1 @@
-export { HttpError, HttpServerError, HttpClientError } from './httpErrors';
+export { HttpError, HttpServerError, HttpClientError } from './httpErrors.js';

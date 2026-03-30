@@ -3,7 +3,7 @@ import { Pressable, Text, View, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import getShadow from '../utils/getShadow';
 import classNames from '../utils/classNames';
-import { Chevron } from './icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +23,7 @@ export default function ScreenHeader({
     >
       {showBackButton && (
         <Pressable onPress={() => navigation.goBack()}>
-          <Chevron className="h-5 w-3.5 fill-neutral-600" />
+          <Ionicons name="chevron-back" size={20} color="#525252" />
         </Pressable>
       )}
 

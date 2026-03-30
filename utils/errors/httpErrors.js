@@ -1,4 +1,4 @@
-import { BasicError } from './BasicError';
+import { BasicError } from './BasicError.js';
 
 export class HttpError extends BasicError {
   constructor(status, message) {
