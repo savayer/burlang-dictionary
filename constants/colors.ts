@@ -1,10 +1,13 @@
 const colors = {
   blue: '#0036a7',
   blueLight: '#e8eef8',
+  blueLighter: '#f2f5fb',
   blueDark: '#002a85',
   yellow: '#f1b742',
   yellowLight: '#fef6e6',
+  yellowLighter: '#fffcf5',
   yellowDark: '#d9a038',
+  bg: '#fafbfd',
   neutral100: '#f5f5f5',
   neutral300: '#d4d4d4',
   neutral400: '#a3a3a3',

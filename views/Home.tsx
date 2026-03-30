@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { twMerge } from 'tailwind-merge';
 import { useFetchData } from '@/components/hooks/useFetchData';
 import { StatusBar } from 'expo-status-bar';
+import getShadow from '@/utils/getShadow';
 
 export default function Home({ route }) {
   const [sourceLanguage, setSourceLanguage] = useState('ru');
@@ -144,12 +145,12 @@ export default function Home({ route }) {
   const toLang = sourceLanguage === 'ru' ? 'БУР' : 'РУС';
 
   return (
-    <View className="flex-1 bg-white">
-      <StatusBar style="dark" />
-      <View style={{ height: insets.top }} className="bg-white" />
+    <View className="flex-1 bg-bur-bg">
+      <StatusBar style="light" />
+      <View style={{ height: insets.top }} className="bg-bur-blue" />
 
       <Navbar title={i18n.t(`app_name_${sourceLanguage}`)}>
-        {isLoading && <ActivityIndicator color="#0036a7" className="ml-2.5" />}
+        {isLoading && <ActivityIndicator color="#ffffff" className="ml-2.5" />}
 
         {outputData.exactTranslations &&
           outputData.exactTranslations[0].name !== '-' && (
@@ -163,7 +164,7 @@ export default function Home({ route }) {
               <Ionicons
                 name={isFavorite ? 'star' : 'star-outline'}
                 size={22}
-                color={isFavorite ? '#f1b742' : '#a3a3a3'}
+                color={isFavorite ? '#f1b742' : 'rgba(255,255,255,0.5)'}
               />
             </Pressable>
           )}
@@ -171,22 +172,27 @@ export default function Home({ route }) {
 
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        className="bg-white"
+        className="bg-bur-bg"
       >
         <View className="px-4 pt-5 pb-4">
           {/* Language Switcher */}
           <View className="flex-row items-center justify-center mb-4">
-            <View className="bg-bur-blue-light rounded-full flex-row items-center px-1 py-1">
-              <View className="bg-bur-yellow rounded-full px-4 py-1.5">
+            <View
+              className="bg-white rounded-full flex-row items-center px-1 py-1"
+              style={getShadow(2, 2)}
+            >
+              <View className="bg-bur-blue rounded-full px-4 py-1.5">
                 <Text className="text-white font-bold text-sm">{fromLang}</Text>
               </View>
 
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={switchLanguage}
-                className="mx-2"
+                className="mx-1.5"
               >
-                <Ionicons name="swap-horizontal" size={20} color="#0036a7" />
+                <View className="bg-bur-yellow rounded-full p-1.5">
+                  <Ionicons name="swap-horizontal" size={20} color="#ffffff" />
+                </View>
               </TouchableOpacity>
 
               <View className="px-4 py-1.5">
@@ -196,7 +202,10 @@ export default function Home({ route }) {
           </View>
 
           {/* Search Input */}
-          <View className="flex-row items-center bg-neutral-100 rounded-full px-4 py-0.5">
+          <View
+            className="flex-row items-center bg-white border border-neutral-200 rounded-full px-4 py-0.5"
+            style={getShadow(1, 1)}
+          >
             <Ionicons name="search" size={18} color="#a3a3a3" />
             <TextInput
               className="flex-1 ml-2.5 py-2.5 text-base"
@@ -231,8 +240,8 @@ export default function Home({ route }) {
           >
             <View
               className={twMerge(
-                'bg-bur-blue rounded-full h-12 justify-center',
-                isLoading && 'bg-neutral-300',
+                'bg-bur-blue rounded-full h-12 justify-center border-b-4 border-bur-yellow-dark',
+                isLoading && 'bg-neutral-300 border-neutral-400',
               )}
             >
               <Text className="text-white font-bold text-center text-base">

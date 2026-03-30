@@ -10,10 +10,10 @@ interface NavbarProps {
 export default function Navbar({ title, children }: NavbarProps) {
   return (
     <View
-      className="pt-4 pb-5 px-4 flex-row items-center bg-white"
-      style={getShadow(3, 2)}
+      className="pt-4 pb-5 px-4 flex-row items-center bg-bur-blue"
+      style={getShadow(6, 4)}
     >
-      <Text className="text-xl text-bur-blue font-bold">{title}</Text>
+      <Text className="text-xl text-white font-bold">{title}</Text>
 
       {children}
     </View>

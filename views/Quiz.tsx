@@ -81,17 +81,17 @@ export default function Quiz() {
   };
 
   return (
-    <View className="flex-1 bg-white">
-      <StatusBar style="dark" />
-      <View style={{ height: insets.top }} className="bg-white" />
+    <View className="flex-1 bg-bur-bg">
+      <StatusBar style="light" />
+      <View style={{ height: insets.top }} className="bg-bur-blue" />
 
       <Navbar title={i18n.t('quiz')}>
-        {isLoading && <ActivityIndicator color="#0036a7" className="ml-2.5" />}
+        {isLoading && <ActivityIndicator color="#ffffff" className="ml-2.5" />}
       </Navbar>
 
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        className="bg-white"
+        className="bg-bur-bg"
       >
         {isLoading && (
           <View className="flex-1 items-center justify-center py-10">
@@ -202,8 +202,8 @@ export default function Quiz() {
                 onPress={tryAgain}
                 className="flex-1"
               >
-                <View className="bg-neutral-100 rounded-full px-4 py-3">
-                  <Text className="text-neutral-800 font-bold text-base text-center">
+                <View className="bg-white border-2 border-bur-blue rounded-full px-4 py-3">
+                  <Text className="text-bur-blue font-bold text-base text-center">
                     {i18n.t('try_again')}
                   </Text>
                 </View>

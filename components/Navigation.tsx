@@ -97,8 +97,17 @@ export default function Navigation() {
     <Tab.Navigator
       id="MainTabs"
       screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.blue,
+          ...getShadow(6, 4),
+        },
+        headerTintColor: '#ffffff',
+        headerTitleStyle: {
+          fontWeight: '700',
+        },
+        headerShadowVisible: false,
         tabBarInactiveTintColor: colors.neutral400,
-        tabBarActiveTintColor: colors.yellow,
+        tabBarActiveTintColor: colors.blue,
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: '600',

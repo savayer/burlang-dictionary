@@ -5,12 +5,12 @@ export default function getShadow(
   shadowRadius = 1.4,
 ): ViewStyle {
   return {
-    shadowColor: '#000',
+    shadowColor: '#1a1a2e',
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: elevation > 4 ? 2 : 1,
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.12,
     shadowRadius,
     elevation,
   };

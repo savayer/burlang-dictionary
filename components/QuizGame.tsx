@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import type { QuizQuestion } from '@/actions/quiz';
+import getShadow from '@/utils/getShadow';
 
 interface QuizGameProps {
   question: QuizQuestion;
@@ -60,7 +61,7 @@ export default function QuizGame({
         <Text className="text-center text-neutral-400 mb-2 font-medium text-sm">
           {questionNumber} / {totalQuestions}
         </Text>
-        <View className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+        <View className="h-2.5 bg-bur-yellow-light rounded-full overflow-hidden">
           <View
             className="h-full bg-bur-yellow rounded-full"
             style={{ width: `${progress * 100}%` }}
@@ -69,8 +70,8 @@ export default function QuizGame({
       </View>
 
       {/* Question Card */}
-      <View className="bg-bur-blue-light rounded-2xl px-5 py-6 mt-4 mb-6">
-        <Text className="text-xl font-bold text-center text-bur-blue">
+      <View className="bg-bur-blue rounded-2xl px-6 py-8 mt-4 mb-6" style={getShadow(4, 3)}>
+        <Text className="text-xl font-bold text-center text-white">
           {question.question}
         </Text>
       </View>
@@ -84,6 +85,7 @@ export default function QuizGame({
             disabled={selectedAnswer !== null}
             onPress={() => onSelectAnswer(index)}
             className={`p-4 rounded-xl border-2 ${getButtonClassName(index, selectedAnswer, question.correctAnswer)}`}
+            style={selectedAnswer === null ? getShadow(1, 1) : undefined}
           >
             <Text
               className={`text-center font-bold text-base ${getTextClassName(index, selectedAnswer, question.correctAnswer)}`}

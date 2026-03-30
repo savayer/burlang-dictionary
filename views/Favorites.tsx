@@ -13,6 +13,7 @@ import i18n from '@/constants/i18n';
 import groupBy from '@/utils/groupBy';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Ionicons } from '@expo/vector-icons';
+import getShadow from '@/utils/getShadow';
 
 interface FavoriteItem {
   key: string;
@@ -104,7 +105,7 @@ export default function Favorites({ navigation }: FavoritesProps) {
   );
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-bur-bg">
       {!favorites || Object.keys(favorites).length === 0 ? (
         <View className="m-auto items-center px-8">
           <View className="bg-bur-yellow-light rounded-full p-6 mb-4">
@@ -160,7 +161,8 @@ export default function Favorites({ navigation }: FavoritesProps) {
                   >
                     <TouchableHighlight
                       underlayColor={colors.neutral100}
-                      className="bg-neutral-50 rounded-xl overflow-hidden"
+                      className="bg-white rounded-xl overflow-hidden"
+                      style={getShadow(2, 1.5)}
                       onPress={searchFavoriteWord.bind(null, translation)}
                     >
                       <View className="flex-row items-center px-4 py-3">
