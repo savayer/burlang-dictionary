@@ -5,8 +5,8 @@ Inspired by [burlang.ru](https://burlang.ru/) and [this app](https://play.google
 This is my practice and wish to get more comfortable app
 and make a small contribution to the study of the Buryad language.
 
-<img src="https://user-images.githubusercontent.com/19423784/219411497-95d77e8b-ffe9-4a5f-b752-7f8e12be0536.jpg" width="280">
-<img src="https://user-images.githubusercontent.com/19423784/219411505-0235fd15-bc88-4670-8478-92303e4d8f62.jpg" width="280">
+<img width="280" alt="image" src="https://github.com/user-attachments/assets/10659e53-9e1a-4970-ab9a-c0c5cfc2fe61" />
+<img width="280" alt="image" src="https://github.com/user-attachments/assets/39f17b18-c87a-4616-8146-975ce01c5312" />
 
 - [Installation](#installation)
 - [Code base](#code-base)
