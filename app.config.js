@@ -14,7 +14,7 @@ module.exports = {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: 'savayer.burlangdictionary',
+      bundleIdentifier: 'com.burlang.dictionary',
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
