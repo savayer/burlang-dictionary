@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
-  Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -82,137 +81,149 @@ export default function Quiz() {
   };
 
   return (
-    <View className="flex-1">
-      <StatusBar style="light" />
-      <View style={{ height: insets.top }} className="bg-bur-blue" />
+    <View className="flex-1 bg-white">
+      <StatusBar style="dark" />
+      <View style={{ height: insets.top }} className="bg-white" />
 
-      <View className="flex-1 bg-bur-blue">
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1, backgroundColor: 'white' }}
-        >
-          {Platform.OS === 'ios' && (
-            <View className="bg-white h-[1000px] absolute left-0 right-0 -bottom-[1000px]" />
-          )}
+      <Navbar title={i18n.t('quiz')}>
+        {isLoading && <ActivityIndicator color="#0036a7" className="ml-2.5" />}
+      </Navbar>
 
-          <Navbar title={i18n.t('quiz')}>
-            {isLoading && <ActivityIndicator color="#fff" className="ml-2.5" />}
-          </Navbar>
-
-          <View className="px-2.5 pb-2.5 -mt-4 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden flex-1">
-            {isLoading && (
-              <View className="flex-1 items-center justify-center py-10">
-                <Text className="text-neutral-600 font-bold text-lg">
-                  {i18n.t('loading')}
-                </Text>
-              </View>
-            )}
-
-            {!isLoading && !isFinished && questions.length > 0 && (
-              <QuizGame
-                question={questions[currentIndex]}
-                questionNumber={currentIndex + 1}
-                totalQuestions={questions.length}
-                selectedAnswer={selectedAnswer}
-                onSelectAnswer={handleAnswer}
-              />
-            )}
-
-            {isFinished && (
-              <View className="pt-6 px-2">
-                <Text className="text-center font-bold text-xl text-neutral-800 mb-4">
-                  {i18n.t('results')}
-                </Text>
-
-                <View className="flex-row justify-center gap-6 mb-6">
-                  <Text className="text-green-500 font-bold text-base">
-                    {i18n.t('correct_answers')}: {correctAnswers}
-                  </Text>
-                  <Text className="text-red-500 font-bold text-base">
-                    {i18n.t('wrong_answers')}: {wrongAnswers}
-                  </Text>
-                </View>
-
-                {questions.map((q, i) => (
-                  <View
-                    key={i}
-                    className="mb-4 flex-row items-start"
-                  >
-                    <View className="flex-1">
-                      <Text className="font-bold text-neutral-800">
-                        {i + 1}. {q.question}
-                      </Text>
-
-                      <Text className="text-neutral-600 mt-1">
-                        {i18n.t('your_answer')}:{' '}
-                        <Text
-                          className={
-                            q.yourAnswer === q.correctAnswer
-                              ? 'text-green-500'
-                              : 'text-red-500'
-                          }
-                        >
-                          {q.answers[q.yourAnswer!]}
-                        </Text>
-                      </Text>
-
-                      {q.yourAnswer !== q.correctAnswer && (
-                        <Text className="text-neutral-600 mt-0.5">
-                          {i18n.t('correct_answer')}:{' '}
-                          <Text className="text-green-500">
-                            {q.answers[q.correctAnswer]}
-                          </Text>
-                        </Text>
-                      )}
-                    </View>
-
-                    <View className="ml-3 mt-0.5">
-                      {q.yourAnswer === q.correctAnswer ? (
-                        <Ionicons
-                          name="checkmark-circle"
-                          size={24}
-                          color="#22c55e"
-                        />
-                      ) : (
-                        <Ionicons
-                          name="close-circle"
-                          size={24}
-                          color="#ef4444"
-                        />
-                      )}
-                    </View>
-                  </View>
-                ))}
-
-                <View className="flex-row justify-end gap-3 mt-4 mb-6">
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={tryAgain}
-                    className="rounded-lg overflow-hidden"
-                  >
-                    <View className="bg-neutral-200 rounded-lg px-4 py-2.5">
-                      <Text className="text-neutral-800 font-bold text-base">
-                        {i18n.t('try_again')}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={newGame}
-                    className="rounded-lg overflow-hidden"
-                  >
-                    <View className="bg-bur-yellow rounded-lg px-4 py-2.5">
-                      <Text className="text-white font-bold text-base">
-                        {i18n.t('new_words')}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        className="bg-white"
+      >
+        {isLoading && (
+          <View className="flex-1 items-center justify-center py-10">
+            <ActivityIndicator size="large" color="#0036a7" />
+            <Text className="text-neutral-400 font-medium text-base mt-3">
+              {i18n.t('loading')}
+            </Text>
           </View>
-        </ScrollView>
-      </View>
+        )}
+
+        {!isLoading && !isFinished && questions.length > 0 && (
+          <QuizGame
+            question={questions[currentIndex]}
+            questionNumber={currentIndex + 1}
+            totalQuestions={questions.length}
+            selectedAnswer={selectedAnswer}
+            onSelectAnswer={handleAnswer}
+          />
+        )}
+
+        {isFinished && (
+          <View className="pt-6 px-4">
+            <Text className="text-center font-bold text-xl text-neutral-800 mb-5">
+              {i18n.t('results')}
+            </Text>
+
+            <View className="flex-row justify-center gap-4 mb-6">
+              <View className="bg-green-50 rounded-xl px-5 py-3 items-center flex-1">
+                <Ionicons name="checkmark-circle" size={28} color="#22c55e" />
+                <Text className="text-green-600 font-bold text-lg mt-1">
+                  {correctAnswers}
+                </Text>
+                <Text className="text-green-600 text-xs font-medium">
+                  {i18n.t('correct_answers')}
+                </Text>
+              </View>
+              <View className="bg-red-50 rounded-xl px-5 py-3 items-center flex-1">
+                <Ionicons name="close-circle" size={28} color="#ef4444" />
+                <Text className="text-red-500 font-bold text-lg mt-1">
+                  {wrongAnswers}
+                </Text>
+                <Text className="text-red-500 text-xs font-medium">
+                  {i18n.t('wrong_answers')}
+                </Text>
+              </View>
+            </View>
+
+            <View className="gap-3 mb-4">
+              {questions.map((q, i) => (
+                <View
+                  key={i}
+                  className={`rounded-xl px-4 py-3 flex-row items-start ${
+                    q.yourAnswer === q.correctAnswer
+                      ? 'bg-green-50'
+                      : 'bg-red-50'
+                  }`}
+                >
+                  <View className="flex-1">
+                    <Text className="font-bold text-neutral-800">
+                      {i + 1}. {q.question}
+                    </Text>
+
+                    <Text className="text-neutral-600 mt-1">
+                      {i18n.t('your_answer')}:{' '}
+                      <Text
+                        className={
+                          q.yourAnswer === q.correctAnswer
+                            ? 'text-green-600 font-bold'
+                            : 'text-red-500 font-bold'
+                        }
+                      >
+                        {q.answers[q.yourAnswer!]}
+                      </Text>
+                    </Text>
+
+                    {q.yourAnswer !== q.correctAnswer && (
+                      <Text className="text-neutral-600 mt-0.5">
+                        {i18n.t('correct_answer')}:{' '}
+                        <Text className="text-green-600 font-bold">
+                          {q.answers[q.correctAnswer]}
+                        </Text>
+                      </Text>
+                    )}
+                  </View>
+
+                  <View className="ml-3 mt-0.5">
+                    {q.yourAnswer === q.correctAnswer ? (
+                      <Ionicons
+                        name="checkmark-circle"
+                        size={24}
+                        color="#22c55e"
+                      />
+                    ) : (
+                      <Ionicons
+                        name="close-circle"
+                        size={24}
+                        color="#ef4444"
+                      />
+                    )}
+                  </View>
+                </View>
+              ))}
+            </View>
+
+            <View className="flex-row justify-end gap-3 mt-2 mb-6">
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={tryAgain}
+                className="flex-1"
+              >
+                <View className="bg-neutral-100 rounded-full px-4 py-3">
+                  <Text className="text-neutral-800 font-bold text-base text-center">
+                    {i18n.t('try_again')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={newGame}
+                className="flex-1"
+              >
+                <View className="bg-bur-blue rounded-full px-4 py-3">
+                  <Text className="text-white font-bold text-base text-center">
+                    {i18n.t('new_words')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 }

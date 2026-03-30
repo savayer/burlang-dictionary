@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Pressable, Text, View, ViewStyle, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import getShadow from '@/utils/getShadow';
 import { twMerge } from 'tailwind-merge';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -26,18 +25,18 @@ export default function ScreenHeader({
 
   return (
     <View
-      className="h-14 px-4 w-full bg-white items-center flex-row mb-4"
-      style={[getShadow(5), style]}
+      className="h-14 px-4 w-full bg-white items-center flex-row border-b border-neutral-100"
+      style={style}
     >
       {showBackButton && (
         <Pressable onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={20} color="#525252" />
+          <Ionicons name="chevron-back" size={20} color="#0036a7" />
         </Pressable>
       )}
 
       <Text
         className={twMerge(
-          'font-bold text-lg text-neutral-600',
+          'font-bold text-lg text-bur-blue',
           titleClassName,
         )}
         style={{

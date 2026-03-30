@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import colors from '@/constants/colors';
 import i18n from '@/constants/i18n';
 import groupBy from '@/utils/groupBy';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { Ionicons } from '@expo/vector-icons';
 
 interface FavoriteItem {
   key: string;
@@ -63,9 +64,6 @@ interface FavoritesProps {
 export default function Favorites({ navigation }: FavoritesProps) {
   const [favorites, setFavorites] = useState<Record<string, FavoriteItem[]>>();
 
-  /*
-   * Load favorites by open the screen
-   * */
   useEffect(() => {
     navigation.addListener('focus', () => {
       loadFavorites().then((data) => setFavorites(data));
@@ -96,7 +94,7 @@ export default function Favorites({ navigation }: FavoritesProps) {
     (type: string, word: string) => (
       <TouchableOpacity
         activeOpacity={0.9}
-        className="bg-bur-blue py-2 px-4 my-1 rounded"
+        className="bg-red-500 py-2 px-4 my-1 rounded-xl justify-center"
         onPress={() => deleteWordFromFavorites(type, word)}
       >
         <Text className="text-white m-auto font-bold">Удалить</Text>
@@ -108,74 +106,84 @@ export default function Favorites({ navigation }: FavoritesProps) {
   return (
     <View className="flex-1 bg-white">
       {!favorites || Object.keys(favorites).length === 0 ? (
-        <View className="m-auto">
-          <Text className="text-lg font-bold">Нет избранных слов</Text>
-          <TouchableHighlight
-            activeOpacity={0.9}
-            className="mt-2.5 rounded-lg overflow-hidden"
+        <View className="m-auto items-center px-8">
+          <View className="bg-bur-yellow-light rounded-full p-6 mb-4">
+            <Ionicons name="star" size={48} color="#f1b742" />
+          </View>
+          <Text className="text-lg font-bold text-neutral-600 text-center">
+            Нет избранных слов
+          </Text>
+          <Text className="text-neutral-400 text-center mt-1 mb-5">
+            Добавляйте слова в избранное, чтобы быстро к ним возвращаться
+          </Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            className="rounded-full overflow-hidden"
             onPress={() => navigation.navigate('Home')}
           >
-            <View className="bg-bur-yellow px-2 py-2">
+            <View className="bg-bur-blue rounded-full px-8 py-3">
               <Text className="text-center text-white text-base font-bold">
                 Искать слова
               </Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       ) : (
-        <ScrollView>
-          {favorites && Object.keys(favorites).length > 0 && (
-            <View>
-              {Object.keys(favorites).map((type) => (
-                <View key={type} className="mb-6">
-                  <View
-                    className="bg-bur-yellow px-4 py-2"
-                    style={{ backgroundColor: '#f1b742' }}
-                  >
-                    <Text className="text-white font-bold">
-                      {type === 'ru2bur'
-                        ? 'Русский > Бурятский'
-                        : 'Бурятский > Русский'}
-                    </Text>
-                  </View>
-
-                  <View className="px-2">
-                    {favorites[type].map((translation, i) => (
-                      <Swipeable
-                        key={i}
-                        renderLeftActions={DeleteButton.bind(
-                          null,
-                          type,
-                          translation.key,
-                        )}
-                        renderRightActions={DeleteButton.bind(
-                          null,
-                          type,
-                          translation.key,
-                        )}
-                      >
-                        <TouchableHighlight
-                          underlayColor={colors.neutral100}
-                          className="px-2 my-1 bg-white"
-                          onPress={searchFavoriteWord.bind(null, translation)}
-                        >
-                          <View>
-                            <View className="border-b border-neutral-300 py-1">
-                              <Text className="font-bold">
-                                {translation.key.toLowerCase()}
-                              </Text>
-                            </View>
-
-                            <Text>{translation.value}</Text>
-                          </View>
-                        </TouchableHighlight>
-                      </Swipeable>
-                    ))}
-                  </View>
+        <ScrollView className="px-4 pt-4">
+          {Object.keys(favorites).map((type) => (
+            <View key={type} className="mb-6">
+              <View className="flex-row mb-3">
+                <View className="bg-bur-yellow-light rounded-full px-4 py-1.5 flex-row items-center">
+                  <Ionicons name="language" size={14} color="#d9a038" />
+                  <Text className="text-bur-yellow-dark font-bold ml-1.5 text-sm">
+                    {type === 'ru2bur'
+                      ? 'Русский → Бурятский'
+                      : 'Бурятский → Русский'}
+                  </Text>
                 </View>
-              ))}
+              </View>
+
+              <View className="gap-2">
+                {favorites[type].map((translation, i) => (
+                  <Swipeable
+                    key={i}
+                    renderLeftActions={DeleteButton.bind(
+                      null,
+                      type,
+                      translation.key,
+                    )}
+                    renderRightActions={DeleteButton.bind(
+                      null,
+                      type,
+                      translation.key,
+                    )}
+                  >
+                    <TouchableHighlight
+                      underlayColor={colors.neutral100}
+                      className="bg-neutral-50 rounded-xl overflow-hidden"
+                      onPress={searchFavoriteWord.bind(null, translation)}
+                    >
+                      <View className="flex-row items-center px-4 py-3">
+                        <View className="flex-1">
+                          <Text className="font-bold text-bur-blue text-base">
+                            {translation.key.toLowerCase()}
+                          </Text>
+                          <Text className="text-neutral-600 mt-0.5">
+                            {translation.value}
+                          </Text>
+                        </View>
+                        <Ionicons
+                          name="chevron-forward"
+                          size={18}
+                          color="#a3a3a3"
+                        />
+                      </View>
+                    </TouchableHighlight>
+                  </Swipeable>
+                ))}
+              </View>
             </View>
-          )}
+          ))}
         </ScrollView>
       )}
     </View>
