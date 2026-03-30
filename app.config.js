@@ -1,9 +1,9 @@
 module.exports = {
   expo: {
-    name: 'Бурятско-русский словарь',
+    name: 'burlang dictionary',
     slug: 'burlang-dictionary',
     owner: 'savayer',
-    version: '0.0.1',
+    version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/icon.png',
     userInterfaceStyle: 'light',
@@ -12,13 +12,12 @@ module.exports = {
       resizeMode: 'contain',
       backgroundColor: '#ffffff',
     },
-    updates: {
-      fallbackToCacheTimeout: 0,
-    },
-    assetBundlePatterns: ['**/*'],
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'savayer.burlangdictionary',
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     android: {
       adaptiveIcon: {
@@ -29,6 +28,13 @@ module.exports = {
     },
     web: {
       favicon: './assets/favicon.png',
+    },
+    updates: {
+      url: 'https://u.expo.dev/d1c566a5-58ec-43d8-ac7b-4438126d2462',
+      fallbackToCacheTimeout: 5000,
+    },
+    runtimeVersion: {
+      policy: 'appVersion',
     },
     extra: {
       eas: {

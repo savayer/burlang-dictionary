@@ -163,19 +163,13 @@ export default function Home({ route }) {
       setScrollUp(false);
     }
   }
-  const spacerHeight = 1000;
 
   return (
     <>
       <StatusBar style="light" />
       <View style={{ height: insets.top }} className="bg-bur-blue" />
 
-      <View
-        className={classNames(
-          'flex-1 bg-bur-blue',
-          //isScrollUp ? 'bg-bur-blue' : 'bg-white',
-        )}
-      >
+      <View className="flex-1 bg-bur-blue">
         <ScrollView
           onScroll={onScroll}
           scrollEventThrottle={16}
@@ -209,6 +203,7 @@ export default function Home({ route }) {
                 </Pressable>
               )}
           </Navbar>
+
           <View className="px-2.5 pb-2.5 -mt-4 bg-white rounded-tl-2xl rounded-tr-2xl overflow-hidden">
             <View className="relative">
               <TextInput
