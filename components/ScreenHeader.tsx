@@ -1,11 +1,19 @@
-import React from 'react';
-import { Pressable, Text, View, Dimensions } from 'react-native';
+import React, { ReactNode } from 'react';
+import { Pressable, Text, View, ViewStyle, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import getShadow from '../utils/getShadow';
-import classNames from '../utils/classNames';
+import getShadow from '@/utils/getShadow';
+import { twMerge } from 'tailwind-merge';
 import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
+
+interface ScreenHeaderProps {
+  title: string;
+  titleClassName?: string;
+  showBackButton?: boolean;
+  style?: ViewStyle;
+  children?: ReactNode;
+}
 
 export default function ScreenHeader({
   title,
@@ -13,7 +21,7 @@ export default function ScreenHeader({
   showBackButton = true,
   style,
   children,
-}) {
+}: ScreenHeaderProps) {
   const navigation = useNavigation();
 
   return (
@@ -28,7 +36,7 @@ export default function ScreenHeader({
       )}
 
       <Text
-        className={classNames(
+        className={twMerge(
           'font-bold text-lg text-neutral-600',
           titleClassName,
         )}

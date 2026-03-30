@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { catchHttpErrors } from '../utils/catchHttpErrors';
+import { catchHttpErrors } from '@/utils/catchHttpErrors';
 // @ts-ignore react-native-dotenv
 import { API_URL } from '@env';
 

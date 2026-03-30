@@ -1,4 +1,9 @@
-export default function getShadow(elevation = 2, shadowRadius = 1.4) {
+import { ViewStyle } from 'react-native';
+
+export default function getShadow(
+  elevation = 2,
+  shadowRadius = 1.4,
+): ViewStyle {
   return {
     shadowColor: '#000',
     shadowOffset: {

@@ -1,8 +1,12 @@
-import React, { useRef } from 'react';
+import React, { ReactNode, useRef } from 'react';
 import { Animated } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
-const FadeInView = (props) => {
+interface FadeInViewProps {
+  children: ReactNode;
+}
+
+const FadeInView = ({ children }: FadeInViewProps) => {
   const fadeAnimation = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
   useFocusEffect(() => {
@@ -28,7 +32,7 @@ const FadeInView = (props) => {
         opacity: fadeAnimation,
       }}
     >
-      {props.children}
+      {children}
     </Animated.View>
   );
 };

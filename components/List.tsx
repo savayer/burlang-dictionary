@@ -1,6 +1,12 @@
 import { Text, View } from 'react-native';
+import { translationItem } from '@/actions/translate';
 
-export default function List({ items = [], title }) {
+interface ListProps {
+  items?: translationItem[];
+  title: string;
+}
+
+export default function List({ items = [], title }: ListProps) {
   return (
     items.length > 0 && (
       <View>
@@ -12,8 +18,8 @@ export default function List({ items = [], title }) {
           <View key={i} className="mb-2">
             <Text className="font-bold">{item.name}</Text>
 
-            {items[i].translations.map((translation, i) => (
-              <Text key={i}>{translation.name}</Text>
+            {items[i].translations.map((translation, j) => (
+              <Text key={j}>{translation.name}</Text>
             ))}
           </View>
         ))}

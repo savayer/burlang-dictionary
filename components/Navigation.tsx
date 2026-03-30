@@ -1,31 +1,30 @@
 import React from 'react';
-import Home from '../views/Home';
-import Favorites from '../views/Favorites';
-import Settings from '../views/Settings';
+import Home from '@/views/Home';
+import Favorites from '@/views/Favorites';
+import Settings from '@/views/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import i18n from '../constants/i18n';
+import i18n from '@/constants/i18n';
 import { TouchableOpacity } from 'react-native';
-import colors from '../constants/colors';
+import colors from '@/constants/colors';
 import FadeInView from './FadeInView';
 
 const Tab = createBottomTabNavigator();
 const iconHeight = 20;
-const iconWidth = 20;
 
-const FadeHome = (props) => (
+const FadeHome = (props: any) => (
   <FadeInView>
     <Home {...props} />
   </FadeInView>
 );
 
-const FadeFavorites = (props) => (
+const FadeFavorites = (props: any) => (
   <FadeInView>
     <Favorites {...props} />
   </FadeInView>
 );
 
-const FadeSettings = (props) => (
+const FadeSettings = (props: any) => (
   <FadeInView>
     <Settings {...props} />
   </FadeInView>
@@ -37,7 +36,7 @@ export default function Navigation() {
       name: 'Home',
       component: FadeHome,
       options: {
-        tabBarIcon: ({ color }) => (
+        tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons name="search" size={iconHeight} color={color} />
         ),
         tabBarLabel: i18n.t('search').toLowerCase(),
@@ -48,7 +47,7 @@ export default function Navigation() {
       name: 'Favorites',
       component: FadeFavorites,
       options: {
-        tabBarIcon: ({ color }) => (
+        tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons name="star-outline" size={iconHeight} color={color} />
         ),
         title: 'Избранное',
@@ -59,7 +58,7 @@ export default function Navigation() {
       name: 'Information',
       component: FadeSettings,
       options: {
-        tabBarIcon: ({ color }) => (
+        tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons
             name="information-circle-outline"
             size={iconHeight}
@@ -76,6 +75,7 @@ export default function Navigation() {
 
   return (
     <Tab.Navigator
+      id="MainTabs"
       screenOptions={{
         tabBarInactiveTintColor: colors.neutral400,
         tabBarActiveTintColor: colors.blue,
@@ -87,7 +87,7 @@ export default function Navigation() {
           paddingVertical: 4,
         },
         tabBarButton: (props) => (
-          <TouchableOpacity activeOpacity={0.8} {...props} />
+          <TouchableOpacity activeOpacity={0.8} {...(props as any)} />
         ),
       }}
     >

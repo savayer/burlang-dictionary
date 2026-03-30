@@ -10,23 +10,16 @@ import {
   Pressable,
   Platform,
 } from 'react-native';
-import Navbar from '../components/Navbar';
-import List from '../components/List';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import Navbar from '@/components/Navbar';
+import List from '@/components/List';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRef, useState } from 'react';
-import {
-  TranslateWord,
-  translateWord,
-  translation,
-} from '../actions/translate';
-import i18n from '../constants/i18n';
+import { translateWord, translation } from '@/actions/translate';
+import i18n from '@/constants/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import classNames from '../utils/classNames';
-import { useFetchData } from '../components/hooks/useFetchData';
+import { twMerge } from 'tailwind-merge';
+import { useFetchData } from '@/components/hooks/useFetchData';
 import { StatusBar } from 'expo-status-bar';
 
 export default function Home({ route }) {
@@ -47,12 +40,10 @@ export default function Home({ route }) {
     result: outputData,
     handleReset,
     handleResponse: handleTranslate,
-  } = useFetchData([], translateWord) as {
-    isLoading: boolean;
-    result: translation;
-    handleReset: () => void;
-    handleResponse: TranslateWord;
-  };
+  } = useFetchData<translation, [string, string]>(
+    [] as unknown as translation,
+    translateWord,
+  );
 
   function switchLanguage() {
     setSourceLanguage(sourceLanguage === 'ru' ? 'bur' : 'ru');
@@ -228,7 +219,7 @@ export default function Home({ route }) {
               onPress={onPressHandler}
             >
               <View
-                className={classNames(
+                className={twMerge(
                   'bg-bur-yellow rounded-xl h-10 justify-center shadow',
                   isLoading && 'bg-neutral-300',
                 )}

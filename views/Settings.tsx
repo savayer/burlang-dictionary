@@ -1,12 +1,16 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import * as WebBrowser from 'expo-web-browser';
-import i18n from '../constants/i18n';
-import ScreenHeader from '../components/ScreenHeader';
+import i18n from '@/constants/i18n';
+import ScreenHeader from '@/components/ScreenHeader';
+
+interface WebPage {
+  title: string;
+  link: string;
+}
 
 export default function Settings() {
-  const webPages = [
+  const webPages: WebPage[] = [
     {
       title: 'Web версия словаря',
       link: 'https://t.buryads.com',

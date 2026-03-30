@@ -1,14 +1,17 @@
 import { useCallback, useState } from 'react';
 
-export const useFetchData = (initialValue, asyncFunction) => {
+export const useFetchData = <T, Args extends unknown[]>(
+  initialValue: T,
+  asyncFunction: (...args: Args) => Promise<T>,
+) => {
   const [defaultValue] = useState(initialValue);
 
   const [isLoading, setLoading] = useState(false);
-  const [result, setResult] = useState(initialValue);
-  const [isError, setError] = useState(null);
+  const [result, setResult] = useState<T>(initialValue);
+  const [isError, setError] = useState<unknown>(null);
 
   const handleResponse = useCallback(
-    async (...args) => {
+    async (...args: Args) => {
       try {
         setLoading(true);
         const data = await asyncFunction(...args);

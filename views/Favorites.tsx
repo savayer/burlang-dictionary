@@ -8,13 +8,19 @@ import {
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import colors from '../constants/colors';
-import i18n from '../constants/i18n';
-import groupBy from '../utils/groupBy';
+import colors from '@/constants/colors';
+import i18n from '@/constants/i18n';
+import groupBy from '@/utils/groupBy';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-async function getAllKeys() {
-  let keys = [];
+interface FavoriteItem {
+  key: string;
+  value: string;
+  type: string;
+}
+
+async function getAllKeys(): Promise<readonly string[]> {
+  let keys: readonly string[] = [];
 
   try {
     keys = await AsyncStorage.getAllKeys();
@@ -25,7 +31,7 @@ async function getAllKeys() {
   return keys;
 }
 
-async function getAllValues(keys) {
+async function getAllValues(keys: readonly string[]) {
   try {
     return await AsyncStorage.multiGet(keys);
   } catch (e) {
@@ -33,12 +39,12 @@ async function getAllValues(keys) {
   }
 }
 
-const loadFavorites = async () => {
+const loadFavorites = async (): Promise<Record<string, FavoriteItem[]>> => {
   const keys = await getAllKeys();
   const data = await getAllValues(keys);
 
-  const parsedArray = data.map(([key, value]) => {
-    const parsedData = JSON.parse(value);
+  const parsedArray = (data ?? []).map(([key, value]) => {
+    const parsedData = JSON.parse(value ?? '{}');
 
     return {
       key,
@@ -50,8 +56,12 @@ const loadFavorites = async () => {
   return groupBy(parsedArray, 'type');
 };
 
-export default function Favorites({ navigation }) {
-  const [favorites, setFavorites] = useState();
+interface FavoritesProps {
+  navigation: any;
+}
+
+export default function Favorites({ navigation }: FavoritesProps) {
+  const [favorites, setFavorites] = useState<Record<string, FavoriteItem[]>>();
 
   /*
    * Load favorites by open the screen
@@ -62,13 +72,13 @@ export default function Favorites({ navigation }) {
     });
   }, []);
 
-  function searchFavoriteWord(translation) {
+  function searchFavoriteWord(translation: FavoriteItem) {
     navigation.navigate('Home', {
       translation,
     });
   }
 
-  async function deleteWordFromFavorites(type, key) {
+  async function deleteWordFromFavorites(type: string, key: string) {
     try {
       await AsyncStorage.removeItem(key);
       const favorites = await loadFavorites();
@@ -83,7 +93,7 @@ export default function Favorites({ navigation }) {
   }
 
   const DeleteButton = useCallback(
-    (type, word) => (
+    (type: string, word: string) => (
       <TouchableOpacity
         activeOpacity={0.9}
         className="bg-bur-blue py-2 px-4 my-1 rounded"

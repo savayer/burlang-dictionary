@@ -5,6 +5,6 @@ const colors = {
   neutral300: '#d4d4d4',
   neutral400: '#a3a3a3',
   neutral600: '#525252',
-};
+} as const;
 
 export default colors;

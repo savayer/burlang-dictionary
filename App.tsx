@@ -2,7 +2,7 @@ import './global.css';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Navigation from './components/Navigation';
+import Navigation from '@/components/Navigation';
 import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
