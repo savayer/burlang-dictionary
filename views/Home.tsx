@@ -249,12 +249,12 @@ export default function Home({ route }) {
               </View>
             ) : (
               <LinearGradient
-                colors={['#0040c1', '#002a85']}
+                colors={['#f5c65c', '#f1b742']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={{ borderRadius: 9999, height: 48, justifyContent: 'center' }}
               >
-                <Text className="text-white font-bold text-center text-base">
+                <Text className="text-bur-blue-dark font-bold text-center text-base">
                   {i18n.t('translate')}
                 </Text>
               </LinearGradient>
