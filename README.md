@@ -17,25 +17,11 @@ and make a small contribution to the study of the Buryad language.
 
 ## Installation
 
-```
-npm i
-cp .env.example .env
-```
-
-and then
-```
-npm run android
-```
-or
-```
-npm run ios
-```
-
-To get a build:
-```
-eas build -p android --profile apk
-```
-
+- `npm run dev` — start Expo dev server
+- `npm run dev:clear` — start with cache cleared
+- `npm run lint` — TypeScript type checking (`tsc --noemit`)
+- `npm run ios` / `npm run android` — run on local simulator/emulator
+- `npm run build-ios` / `npm run build-android` — production EAS builds
 
 ## Code base
 
@@ -49,27 +35,6 @@ There are only two main colors in the Buryat flag, blue and yellow.
 
 There is also `./constants/colors.js` in case it's not possible
 to use Tailwind classes. But it's better not to use it frequently.
-
-### Icons
-
-All the icons are stored in the `./components/icons` directory.
-You need to use the [react-native-svg](https://www.npmjs.com/package/react-native-svg) package to create an svg icon,
-and version should be not higher than 13.0.4 according to Expo requirements.
-This requirement may not be relevant, check the documentation
-
-```js
-import React from 'react';
-import Svg, { Path } from 'react-native-svg';
-
-export function Chevron(attributes) {
-  return (
-    <Svg viewBox="0 0 16 24" {...attributes}>
-      <Path d="..." />
-    </Svg>
-  );
-}
-
-```
 
 To style the icon you need to use the `className` attribute
 with Tailwind classes:
