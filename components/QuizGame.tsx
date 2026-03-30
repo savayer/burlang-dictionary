@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import type { QuizQuestion } from '@/actions/quiz';
 import getShadow from '@/utils/getShadow';
 
@@ -70,8 +71,11 @@ export default function QuizGame({
       </View>
 
       {/* Question Card */}
-      <View className="bg-bur-blue rounded-2xl px-6 py-8 mt-4 mb-6" style={getShadow(4, 3)}>
-        <Text className="text-xl font-bold text-center text-white">
+      <View className="bg-bur-blue-light rounded-2xl px-6 py-6 mt-4 mb-6 items-center">
+        <View className="bg-bur-yellow rounded-full p-2 mb-3">
+          <Ionicons name="help" size={20} color="#ffffff" />
+        </View>
+        <Text className="text-2xl font-bold text-center text-bur-blue">
           {question.question}
         </Text>
       </View>
@@ -84,11 +88,18 @@ export default function QuizGame({
             activeOpacity={0.7}
             disabled={selectedAnswer !== null}
             onPress={() => onSelectAnswer(index)}
-            className={`p-4 rounded-xl border-2 ${getButtonClassName(index, selectedAnswer, question.correctAnswer)}`}
-            style={selectedAnswer === null ? getShadow(1, 1) : undefined}
+            className={`p-4 rounded-xl border ${getButtonClassName(
+              index,
+              selectedAnswer,
+              question.correctAnswer,
+            )}`}
           >
             <Text
-              className={`text-center font-bold text-base ${getTextClassName(index, selectedAnswer, question.correctAnswer)}`}
+              className={`text-center font-bold text-base ${getTextClassName(
+                index,
+                selectedAnswer,
+                question.correctAnswer,
+              )}`}
             >
               {answer}
             </Text>

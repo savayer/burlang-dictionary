@@ -26,5 +26,15 @@
   "new_words": "Новые слова",
   "correct_answers": "Правильных ответов",
   "wrong_answers": "Неправильных ответов",
-  "loading": "Загрузка..."
+  "loading": "Загрузка...",
+  "delete": "Удалить",
+  "no_favorites": "Нет избранных слов",
+  "no_favorites_description": "Добавляйте слова в избранное, чтобы быстро к ним возвращаться",
+  "search_words": "Искать слова",
+  "ru_to_bur": "Русский → Бурятский",
+  "bur_to_ru": "Бурятский → Русский",
+  "web_dictionary": "Web версия словаря",
+  "discord_server": "Discord server",
+  "russian": "русский",
+  "buryat": "бурятский"
 }

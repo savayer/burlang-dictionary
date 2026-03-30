@@ -98,7 +98,7 @@ export default function Favorites({ navigation }: FavoritesProps) {
         className="bg-red-500 py-2 px-4 my-1 rounded-xl justify-center"
         onPress={() => deleteWordFromFavorites(type, word)}
       >
-        <Text className="text-white m-auto font-bold">Удалить</Text>
+        <Text className="text-white m-auto font-bold">{i18n.t('delete')}</Text>
       </TouchableOpacity>
     ),
     [],
@@ -112,10 +112,10 @@ export default function Favorites({ navigation }: FavoritesProps) {
             <Ionicons name="star" size={48} color="#f1b742" />
           </View>
           <Text className="text-lg font-bold text-neutral-600 text-center">
-            Нет избранных слов
+            {i18n.t('no_favorites')}
           </Text>
           <Text className="text-neutral-400 text-center mt-1 mb-5">
-            Добавляйте слова в избранное, чтобы быстро к ним возвращаться
+            {i18n.t('no_favorites_description')}
           </Text>
           <TouchableOpacity
             activeOpacity={0.8}
@@ -124,7 +124,7 @@ export default function Favorites({ navigation }: FavoritesProps) {
           >
             <View className="bg-bur-blue rounded-full px-8 py-3">
               <Text className="text-center text-white text-base font-bold">
-                Искать слова
+                {i18n.t('search_words')}
               </Text>
             </View>
           </TouchableOpacity>
@@ -137,9 +137,7 @@ export default function Favorites({ navigation }: FavoritesProps) {
                 <View className="bg-bur-yellow-light rounded-full px-4 py-1.5 flex-row items-center">
                   <Ionicons name="language" size={14} color="#d9a038" />
                   <Text className="text-bur-yellow-dark font-bold ml-1.5 text-sm">
-                    {type === 'ru2bur'
-                      ? 'Русский → Бурятский'
-                      : 'Бурятский → Русский'}
+                    {i18n.t(type === 'ru2bur' ? 'ru_to_bur' : 'bur_to_ru')}
                   </Text>
                 </View>
               </View>

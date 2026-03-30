@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { twMerge } from 'tailwind-merge';
 import { useFetchData } from '@/components/hooks/useFetchData';
 import { StatusBar } from 'expo-status-bar';
+import { LinearGradient } from 'expo-linear-gradient';
 import getShadow from '@/utils/getShadow';
 
 export default function Home({ route }) {
@@ -141,8 +142,12 @@ export default function Home({ route }) {
     [outputData, isFavorite],
   );
 
-  const fromLang = sourceLanguage === 'ru' ? 'РУС' : 'БУР';
-  const toLang = sourceLanguage === 'ru' ? 'БУР' : 'РУС';
+  const fromLang = i18n
+    .t(sourceLanguage === 'ru' ? 'russian' : 'buryat')
+    .toUpperCase();
+  const toLang = i18n
+    .t(sourceLanguage === 'ru' ? 'buryat' : 'russian')
+    .toUpperCase();
 
   return (
     <View className="flex-1 bg-bur-bg">
@@ -155,10 +160,7 @@ export default function Home({ route }) {
         {outputData.exactTranslations &&
           outputData.exactTranslations[0].name !== '-' && (
             <Pressable
-              onPress={handleFavorites.bind(
-                null,
-                outputData.exactTranslations,
-              )}
+              onPress={handleFavorites.bind(null, outputData.exactTranslations)}
               className="ml-auto"
             >
               <Ionicons
@@ -170,10 +172,7 @@ export default function Home({ route }) {
           )}
       </Navbar>
 
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        className="bg-bur-bg"
-      >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-bur-bg">
         <View className="px-4 pt-5 pb-4">
           {/* Language Switcher */}
           <View className="flex-row items-center justify-center mb-4">
@@ -181,22 +180,26 @@ export default function Home({ route }) {
               className="bg-white rounded-full flex-row items-center px-1 py-1"
               style={getShadow(2, 2)}
             >
-              <View className="bg-bur-blue rounded-full px-4 py-1.5">
-                <Text className="text-white font-bold text-sm">{fromLang}</Text>
+              <View className="flex-1 py-1.5">
+                <Text className="text-bur-blue font-bold text-sm text-center">
+                  {fromLang}
+                </Text>
               </View>
 
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={switchLanguage}
-                className="mx-1.5"
+                className="shrink-0 mx-1"
               >
                 <View className="bg-bur-yellow rounded-full p-1.5">
-                  <Ionicons name="swap-horizontal" size={20} color="#ffffff" />
+                  <Ionicons name="swap-horizontal" size={18} color="#ffffff" />
                 </View>
               </TouchableOpacity>
 
-              <View className="px-4 py-1.5">
-                <Text className="text-bur-blue font-bold text-sm">{toLang}</Text>
+              <View className="flex-1 py-1.5">
+                <Text className="text-bur-blue font-bold text-sm text-center">
+                  {toLang}
+                </Text>
               </View>
             </View>
           </View>
@@ -208,7 +211,7 @@ export default function Home({ route }) {
           >
             <Ionicons name="search" size={18} color="#a3a3a3" />
             <TextInput
-              className="flex-1 ml-2.5 py-2.5 text-base"
+              className="flex-1 ml-2.5 py-3 leading-5 text-base"
               placeholder={i18n.t(`input_placeholder_${sourceLanguage}`)}
               placeholderTextColor="#a3a3a3"
               value={text}
@@ -238,16 +241,24 @@ export default function Home({ route }) {
             className="mt-3"
             onPress={onPressHandler}
           >
-            <View
-              className={twMerge(
-                'bg-bur-blue rounded-full h-12 justify-center border-b-4 border-bur-yellow-dark',
-                isLoading && 'bg-neutral-300 border-neutral-400',
-              )}
-            >
-              <Text className="text-white font-bold text-center text-base">
-                {i18n.t('translate')}
-              </Text>
-            </View>
+            {isLoading ? (
+              <View className="bg-neutral-300 rounded-full h-12 justify-center">
+                <Text className="text-white font-bold text-center text-base">
+                  {i18n.t('translate')}
+                </Text>
+              </View>
+            ) : (
+              <LinearGradient
+                colors={['#0040c1', '#002a85']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ borderRadius: 9999, height: 48, justifyContent: 'center' }}
+              >
+                <Text className="text-white font-bold text-center text-base">
+                  {i18n.t('translate')}
+                </Text>
+              </LinearGradient>
+            )}
           </TouchableOpacity>
         </View>
 

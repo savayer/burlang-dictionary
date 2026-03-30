@@ -26,5 +26,15 @@
   "new_words": "Шэнэ үгэнүүд",
   "correct_answers": "Зүб харюунууд",
   "wrong_answers": "Буруу харюунууд",
-  "loading": "Ашаалжа байна..."
+  "loading": "Ашаалжа байна...",
+  "delete": "Усадха",
+  "no_favorites": "Шэлэгдэмэл үгэнүүд үгы",
+  "no_favorites_description": "Шэлэгдэмэл үгэнүүдтэ нэмэгты",
+  "search_words": "Үгэнүүдые бэдэрэхэ",
+  "ru_to_bur": "Ород → Буряад",
+  "bur_to_ru": "Буряад → Ород",
+  "web_dictionary": "Web толи",
+  "discord_server": "Discord server",
+  "russian": "ород",
+  "buryat": "буряад"
 }
