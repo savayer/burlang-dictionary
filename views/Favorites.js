@@ -149,7 +149,7 @@ export default function Favorites({ navigation }) {
                           className="px-2 my-1 bg-white"
                           onPress={searchFavoriteWord.bind(null, translation)}
                         >
-                          <>
+                          <View>
                             <View className="border-b border-neutral-300 py-1">
                               <Text className="font-bold">
                                 {translation.key.toLowerCase()}
@@ -157,7 +157,7 @@ export default function Favorites({ navigation }) {
                             </View>
 
                             <Text>{translation.value}</Text>
-                          </>
+                          </View>
                         </TouchableHighlight>
                       </Swipeable>
                     ))}

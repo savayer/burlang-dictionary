@@ -23,7 +23,7 @@ import {
   translation,
 } from '../actions/translate';
 import i18n from '../constants/i18n';
-import { Exchange, Star } from '../components/icons';
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import classNames from '../utils/classNames';
 import { useFetchData } from '../components/hooks/useFetchData';
@@ -165,7 +165,7 @@ export default function Home({ route }) {
   }
 
   return (
-    <>
+    <View className="flex-1">
       <StatusBar style="light" />
       <View style={{ height: insets.top }} className="bg-bur-blue" />
 
@@ -191,14 +191,10 @@ export default function Home({ route }) {
                   )}
                   className="ml-auto"
                 >
-                  <Star
-                    className={classNames(
-                      'w-5 h-5',
-                      isFavorite ? 'fill-bur-yellow' : 'fill-neutral-400',
-                    )}
-                    activeClassName={
-                      isFavorite ? 'fill-bur-yellow' : 'fill-transparent'
-                    }
+                  <Ionicons
+                    name={isFavorite ? 'star' : 'star-outline'}
+                    size={20}
+                    color={isFavorite ? '#f1b742' : '#a3a3a3'}
                   />
                 </Pressable>
               )}
@@ -221,7 +217,7 @@ export default function Home({ route }) {
                 className="absolute right-2 top-1/2"
                 onPress={switchLanguage}
               >
-                <Exchange className="w-5 h-5 fill-bur-blue" />
+                <Ionicons name="swap-horizontal" size={20} color="#0036a7" />
               </TouchableOpacity>
             </View>
 
@@ -244,7 +240,7 @@ export default function Home({ route }) {
             </TouchableOpacity>
 
             {outputData && (
-              <>
+              <View>
                 <List
                   items={outputData.exactTranslations}
                   title={i18n.t('translations')}
@@ -259,11 +255,11 @@ export default function Home({ route }) {
                   items={outputData.possibleTranslation}
                   title={i18n.t('possible_translations')}
                 />
-              </>
+              </View>
             )}
           </View>
         </ScrollView>
       </View>
-    </>
+    </View>
   );
 }
