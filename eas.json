@@ -1,7 +1,7 @@
 {
   "cli": {
     "version": ">= 3.5.2",
-    "appVersionSource": "local"
+    "appVersionSource": "remote"
   },
   "build": {
     "dev": {
@@ -21,6 +21,14 @@
       "ios": {
         "simulator": false
       }
+    },
+    "apk-prod": {
+      "channel": "production",
+      "android": {
+        "buildType": "apk"
+      },
+      "autoIncrement": true,
+      "environment": "production"
     },
     "prod": {
       "channel": "production",

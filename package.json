@@ -11,6 +11,7 @@
     "dev-ios": "eas build -p ios --profile dev-ios --local",
     "dev-ios-device": "eas build -p ios --profile dev-ios-device --local",
     "dev-android": "eas build -p android --profile dev --local",
+    "apk-prod": "eas build -p android --profile apk-prod --local",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "lint": "tsc --noemit"
