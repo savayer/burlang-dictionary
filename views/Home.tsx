@@ -17,7 +17,6 @@ import { translateWord, translation } from '@/actions/translate';
 import i18n from '@/constants/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { twMerge } from 'tailwind-merge';
 import { useFetchData } from '@/components/hooks/useFetchData';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -172,7 +171,11 @@ export default function Home({ route }) {
           )}
       </Navbar>
 
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-bur-bg">
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        className="bg-bur-bg"
+        keyboardShouldPersistTaps="handled"
+      >
         <View className="px-4 pt-5 pb-4">
           {/* Language Switcher */}
           <View className="flex-row items-center justify-center mb-4">
@@ -252,7 +255,11 @@ export default function Home({ route }) {
                 colors={['#f5c65c', '#f1b742']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
-                style={{ borderRadius: 9999, height: 48, justifyContent: 'center' }}
+                style={{
+                  borderRadius: 9999,
+                  height: 48,
+                  justifyContent: 'center',
+                }}
               >
                 <Text className="text-bur-blue-dark font-bold text-center text-base">
                   {i18n.t('translate')}
