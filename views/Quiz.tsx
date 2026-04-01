@@ -10,7 +10,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
-import { Confetti } from 'react-native-fast-confetti';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import { twMerge } from 'tailwind-merge';
 import Navbar from '@/components/Navbar';
 import QuizGame from '@/components/QuizGame';
@@ -227,10 +227,12 @@ export default function Quiz() {
         )}
       </ScrollView>
 
-      {isFinished && correctAnswers >= 10 && (
-        <View pointerEvents="none" className="absolute inset-0 z-50">
-          <Confetti count={200} fallDuration={4000} />
-        </View>
+      {isFinished && correctAnswers >= 8 && (
+        <ConfettiCannon
+          count={150}
+          explosionSpeed={200}
+          origin={{ x: -30, y: -50 }}
+        />
       )}
     </View>
   );
