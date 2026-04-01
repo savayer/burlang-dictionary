@@ -10,6 +10,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
+import { Confetti } from 'react-native-fast-confetti';
 import Navbar from '@/components/Navbar';
 import QuizGame from '@/components/QuizGame';
 import { fetchQuizQuestions, QuizQuestion } from '@/actions/quiz';
@@ -46,7 +47,8 @@ export default function Quiz() {
     };
   }, []);
 
-  const isFinished = !isLoading && questions.length > 0 && currentIndex >= questions.length;
+  const isFinished =
+    !isLoading && questions.length > 0 && currentIndex >= questions.length;
 
   const handleAnswer = (index: number) => {
     setSelectedAnswer(index);
@@ -89,10 +91,7 @@ export default function Quiz() {
         {isLoading && <ActivityIndicator color="#ffffff" className="ml-2.5" />}
       </Navbar>
 
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        className="bg-bur-bg"
-      >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="bg-bur-bg">
         {isLoading && (
           <View className="flex-1 items-center justify-center py-10">
             <ActivityIndicator size="large" color="#0036a7" />
@@ -185,11 +184,7 @@ export default function Quiz() {
                         color="#22c55e"
                       />
                     ) : (
-                      <Ionicons
-                        name="close-circle"
-                        size={24}
-                        color="#ef4444"
-                      />
+                      <Ionicons name="close-circle" size={24} color="#ef4444" />
                     )}
                   </View>
                 </View>
@@ -224,6 +219,12 @@ export default function Quiz() {
           </View>
         )}
       </ScrollView>
+
+      {isFinished && correctAnswers >= 10 && (
+        <View pointerEvents="none" className="absolute inset-0 z-50">
+          <Confetti count={200} fallDuration={4000} />
+        </View>
+      )}
     </View>
   );
 }
