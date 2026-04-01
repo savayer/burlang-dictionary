@@ -6,7 +6,7 @@ import Settings from '@/views/Settings';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import i18n from '@/constants/i18n';
-import { TouchableOpacity } from 'react-native';
+import { Platform, TouchableOpacity } from 'react-native';
 import colors from '@/constants/colors';
 import getShadow from '@/utils/getShadow';
 
@@ -42,7 +42,11 @@ export default function Navigation() {
       component: Quiz,
       options: {
         tabBarIcon: ({ color }: { color: string }) => (
-          <MaterialCommunityIcons name="head-question-outline" size={iconHeight} color={color} />
+          <MaterialCommunityIcons
+            name="head-question-outline"
+            size={iconHeight}
+            color={color}
+          />
         ),
         title: i18n.t('quiz'),
         tabBarLabel: i18n.t('quiz').toLowerCase(),
@@ -70,7 +74,6 @@ export default function Navigation() {
     <Tab.Navigator
       id="MainTabs"
       screenOptions={{
-        animation: 'fade',
         headerStyle: {
           backgroundColor: colors.blue,
           ...getShadow(6, 4),

@@ -193,12 +193,14 @@ export default function Quiz() {
             </View>
 
             <View className="flex-row justify-end gap-3 mt-2 mb-6">
-              <Pressable
-                onPress={tryAgain}
-                className="flex-1"
-              >
+              <Pressable onPress={tryAgain} className="flex-1">
                 {({ pressed }) => (
-                  <View className={twMerge('border-2 border-bur-blue rounded-full px-4 py-3 bg-white', pressed && 'bg-neutral-100')}>
+                  <View
+                    className={twMerge(
+                      'border-2 border-bur-blue rounded-full px-4 py-3 bg-white',
+                      pressed && 'bg-neutral-100',
+                    )}
+                  >
                     <Text className="text-bur-blue font-bold text-base text-center">
                       {i18n.t('try_again')}
                     </Text>
@@ -206,12 +208,14 @@ export default function Quiz() {
                 )}
               </Pressable>
 
-              <Pressable
-                onPress={newGame}
-                className="flex-1"
-              >
+              <Pressable onPress={newGame} className="flex-1">
                 {({ pressed }) => (
-                  <View className={twMerge('rounded-full px-4 py-3 bg-bur-blue', pressed && 'bg-bur-blue/80')}>
+                  <View
+                    className={twMerge(
+                      'rounded-full px-4 py-3 bg-bur-blue',
+                      pressed && 'bg-bur-blue/80',
+                    )}
+                  >
                     <Text className="text-white font-bold text-base text-center">
                       {i18n.t('new_words')}
                     </Text>

@@ -1,6 +1,6 @@
 module.exports = {
   expo: {
-    name: 'burlang dictionary',
+    name: 'Burlang',
     slug: 'burlang-dictionary',
     owner: 'savayer',
     version: '1.0.0',
@@ -15,9 +15,9 @@ module.exports = {
     ios: {
       supportsTablet: true,
       bundleIdentifier: 'com.burlang.dictionary',
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+      },
     },
     android: {
       adaptiveIcon: {
