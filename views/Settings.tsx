@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, Pressable, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import Navbar from '@/components/Navbar';
+import { twMerge } from 'tailwind-merge';
 import getShadow from '@/utils/getShadow';
 import i18n from '@/constants/i18n';
 
@@ -58,28 +59,29 @@ export default function Settings() {
 
           <View className="gap-3">
             {webPages.map((page, i) => (
-              <TouchableOpacity
+              <Pressable
                 key={i}
-                activeOpacity={0.7}
                 onPress={() => WebBrowser.openBrowserAsync(page.link)}
               >
-                <View
-                  className="flex-row items-center bg-white rounded-xl px-4 py-4"
-                  style={getShadow(2, 1.5)}
-                >
-                  <View className={`${page.iconBg} rounded-full p-2.5 mr-3`}>
-                    <Ionicons
-                      name={page.icon}
-                      size={20}
-                      color={page.iconColor}
-                    />
+                {({ pressed }) => (
+                  <View
+                    className={twMerge('flex-row items-center rounded-xl px-4 py-4 bg-white', pressed && 'bg-neutral-100')}
+                    style={getShadow(2, 1.5)}
+                  >
+                    <View className={`${page.iconBg} rounded-full p-2.5 mr-3`}>
+                      <Ionicons
+                        name={page.icon}
+                        size={20}
+                        color={page.iconColor}
+                      />
+                    </View>
+                    <Text className="flex-1 font-bold text-base text-neutral-800">
+                      {page.title}
+                    </Text>
+                    <Ionicons name="chevron-forward" size={18} color="#a3a3a3" />
                   </View>
-                  <Text className="flex-1 font-bold text-base text-neutral-800">
-                    {page.title}
-                  </Text>
-                  <Ionicons name="chevron-forward" size={18} color="#a3a3a3" />
-                </View>
-              </TouchableOpacity>
+                )}
+              </Pressable>
             ))}
           </View>
         </View>

@@ -3,12 +3,10 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableHighlight,
-  TouchableOpacity,
+  Pressable,
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import colors from '@/constants/colors';
 import i18n from '@/constants/i18n';
 import groupBy from '@/utils/groupBy';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -16,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import Navbar from '@/components/Navbar';
+import { twMerge } from 'tailwind-merge';
 import getShadow from '@/utils/getShadow';
 
 interface FavoriteItem {
@@ -97,13 +96,16 @@ export default function Favorites({ navigation }: FavoritesProps) {
 
   const DeleteButton = useCallback(
     (type: string, word: string) => (
-      <TouchableOpacity
-        activeOpacity={0.9}
-        className="bg-red-500 py-2 px-4 my-1 rounded-xl justify-center"
+      <Pressable
+        className="my-1 rounded-xl overflow-hidden"
         onPress={() => deleteWordFromFavorites(type, word)}
       >
-        <Text className="text-white m-auto font-bold">{i18n.t('delete')}</Text>
-      </TouchableOpacity>
+        {({ pressed }) => (
+          <View className={twMerge('py-2 px-4 rounded-xl justify-center bg-red-500', pressed && 'bg-red-600')}>
+            <Text className="text-white m-auto font-bold">{i18n.t('delete')}</Text>
+          </View>
+        )}
+      </Pressable>
     ),
     [],
   );
@@ -125,17 +127,18 @@ export default function Favorites({ navigation }: FavoritesProps) {
           <Text className="text-neutral-400 text-center mt-1 mb-5">
             {i18n.t('no_favorites_description')}
           </Text>
-          <TouchableOpacity
-            activeOpacity={0.8}
+          <Pressable
             className="rounded-full overflow-hidden"
             onPress={() => navigation.navigate('Home')}
           >
-            <View className="bg-bur-blue rounded-full px-8 py-3">
-              <Text className="text-center text-white text-base font-bold">
-                {i18n.t('search_words')}
-              </Text>
-            </View>
-          </TouchableOpacity>
+            {({ pressed }) => (
+              <View className={twMerge('rounded-full px-8 py-3 bg-bur-blue', pressed && 'bg-bur-blue/80')}>
+                <Text className="text-center text-white text-base font-bold">
+                  {i18n.t('search_words')}
+                </Text>
+              </View>
+            )}
+          </Pressable>
         </View>
       ) : (
         <ScrollView className="px-4 pt-4">
@@ -165,28 +168,29 @@ export default function Favorites({ navigation }: FavoritesProps) {
                       translation.key,
                     )}
                   >
-                    <TouchableHighlight
-                      underlayColor={colors.neutral100}
-                      className="bg-white rounded-xl overflow-hidden"
+                    <Pressable
+                      className="rounded-xl overflow-hidden"
                       style={getShadow(2, 1.5)}
                       onPress={searchFavoriteWord.bind(null, translation)}
                     >
-                      <View className="flex-row items-center px-4 py-3">
-                        <View className="flex-1">
-                          <Text className="font-bold text-bur-blue text-base">
-                            {translation.key.toLowerCase()}
-                          </Text>
-                          <Text className="text-neutral-600 mt-0.5">
-                            {translation.value}
-                          </Text>
+                      {({ pressed }) => (
+                        <View className={twMerge('flex-row items-center px-4 py-3 rounded-xl bg-white', pressed && 'bg-neutral-100')}>
+                          <View className="flex-1">
+                            <Text className="font-bold text-bur-blue text-base">
+                              {translation.key.toLowerCase()}
+                            </Text>
+                            <Text className="text-neutral-600 mt-0.5">
+                              {translation.value}
+                            </Text>
+                          </View>
+                          <Ionicons
+                            name="chevron-forward"
+                            size={18}
+                            color="#a3a3a3"
+                          />
                         </View>
-                        <Ionicons
-                          name="chevron-forward"
-                          size={18}
-                          color="#a3a3a3"
-                        />
-                      </View>
-                    </TouchableHighlight>
+                      )}
+                    </Pressable>
                   </Swipeable>
                 ))}
               </View>

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { twMerge } from 'tailwind-merge';
 import type { QuizQuestion } from '@/actions/quiz';
 import getShadow from '@/utils/getShadow';
 
@@ -83,27 +84,30 @@ export default function QuizGame({
       {/* Answer Buttons */}
       <View className="gap-3">
         {question.answers.map((answer, index) => (
-          <TouchableOpacity
+          <Pressable
             key={index}
-            activeOpacity={0.7}
             disabled={selectedAnswer !== null}
             onPress={() => onSelectAnswer(index)}
-            className={`p-4 rounded-xl border ${getButtonClassName(
-              index,
-              selectedAnswer,
-              question.correctAnswer,
-            )}`}
           >
-            <Text
-              className={`text-center font-bold text-base ${getTextClassName(
-                index,
-                selectedAnswer,
-                question.correctAnswer,
-              )}`}
-            >
-              {answer}
-            </Text>
-          </TouchableOpacity>
+            {({ pressed }) => (
+              <View
+                className={twMerge(
+                  'p-4 rounded-xl border',
+                  getButtonClassName(index, selectedAnswer, question.correctAnswer),
+                  pressed && selectedAnswer === null && 'bg-neutral-100',
+                )}
+              >
+                <Text
+                  className={twMerge(
+                    'text-center font-bold text-base',
+                    getTextClassName(index, selectedAnswer, question.correctAnswer),
+                  )}
+                >
+                  {answer}
+                </Text>
+              </View>
+            )}
+          </Pressable>
         ))}
       </View>
     </View>

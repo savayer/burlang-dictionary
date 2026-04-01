@@ -4,13 +4,14 @@ import {
   Text,
   ScrollView,
   ActivityIndicator,
-  TouchableOpacity,
+  Pressable,
   Alert,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
 import { Confetti } from 'react-native-fast-confetti';
+import { twMerge } from 'tailwind-merge';
 import Navbar from '@/components/Navbar';
 import QuizGame from '@/components/QuizGame';
 import { fetchQuizQuestions, QuizQuestion } from '@/actions/quiz';
@@ -192,29 +193,31 @@ export default function Quiz() {
             </View>
 
             <View className="flex-row justify-end gap-3 mt-2 mb-6">
-              <TouchableOpacity
-                activeOpacity={0.8}
+              <Pressable
                 onPress={tryAgain}
                 className="flex-1"
               >
-                <View className="bg-white border-2 border-bur-blue rounded-full px-4 py-3">
-                  <Text className="text-bur-blue font-bold text-base text-center">
-                    {i18n.t('try_again')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                {({ pressed }) => (
+                  <View className={twMerge('border-2 border-bur-blue rounded-full px-4 py-3 bg-white', pressed && 'bg-neutral-100')}>
+                    <Text className="text-bur-blue font-bold text-base text-center">
+                      {i18n.t('try_again')}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
 
-              <TouchableOpacity
-                activeOpacity={0.8}
+              <Pressable
                 onPress={newGame}
                 className="flex-1"
               >
-                <View className="bg-bur-blue rounded-full px-4 py-3">
-                  <Text className="text-white font-bold text-base text-center">
-                    {i18n.t('new_words')}
-                  </Text>
-                </View>
-              </TouchableOpacity>
+                {({ pressed }) => (
+                  <View className={twMerge('rounded-full px-4 py-3 bg-bur-blue', pressed && 'bg-bur-blue/80')}>
+                    <Text className="text-white font-bold text-base text-center">
+                      {i18n.t('new_words')}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
             </View>
           </View>
         )}
