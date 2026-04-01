@@ -8,41 +8,16 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import i18n from '@/constants/i18n';
 import { TouchableOpacity } from 'react-native';
 import colors from '@/constants/colors';
-import FadeInView from './FadeInView';
 import getShadow from '@/utils/getShadow';
 
 const Tab = createBottomTabNavigator();
 const iconHeight = 22;
 
-const FadeHome = (props: any) => (
-  <FadeInView>
-    <Home {...props} />
-  </FadeInView>
-);
-
-const FadeFavorites = (props: any) => (
-  <FadeInView>
-    <Favorites {...props} />
-  </FadeInView>
-);
-
-const FadeQuiz = (props: any) => (
-  <FadeInView>
-    <Quiz {...props} />
-  </FadeInView>
-);
-
-const FadeSettings = (props: any) => (
-  <FadeInView>
-    <Settings {...props} />
-  </FadeInView>
-);
-
 export default function Navigation() {
   const navItems = [
     {
       name: 'Home',
-      component: FadeHome,
+      component: Home,
       options: {
         tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons name="search" size={iconHeight} color={color} />
@@ -53,7 +28,7 @@ export default function Navigation() {
     },
     {
       name: 'Favorites',
-      component: FadeFavorites,
+      component: Favorites,
       options: {
         tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons name="star-outline" size={iconHeight} color={color} />
@@ -64,7 +39,7 @@ export default function Navigation() {
     },
     {
       name: 'Quiz',
-      component: FadeQuiz,
+      component: Quiz,
       options: {
         tabBarIcon: ({ color }: { color: string }) => (
           <MaterialCommunityIcons name="head-question-outline" size={iconHeight} color={color} />
@@ -76,7 +51,7 @@ export default function Navigation() {
     },
     {
       name: 'Information',
-      component: FadeSettings,
+      component: Settings,
       options: {
         tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons
@@ -95,6 +70,7 @@ export default function Navigation() {
     <Tab.Navigator
       id="MainTabs"
       screenOptions={{
+        animation: 'fade',
         headerStyle: {
           backgroundColor: colors.blue,
           ...getShadow(6, 4),
