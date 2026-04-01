@@ -13,6 +13,9 @@ import i18n from '@/constants/i18n';
 import groupBy from '@/utils/groupBy';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import Navbar from '@/components/Navbar';
 import getShadow from '@/utils/getShadow';
 
 interface FavoriteItem {
@@ -63,6 +66,7 @@ interface FavoritesProps {
 }
 
 export default function Favorites({ navigation }: FavoritesProps) {
+  const insets = useSafeAreaInsets();
   const [favorites, setFavorites] = useState<Record<string, FavoriteItem[]>>();
 
   useEffect(() => {
@@ -106,6 +110,10 @@ export default function Favorites({ navigation }: FavoritesProps) {
 
   return (
     <View className="flex-1 bg-bur-bg">
+      <StatusBar style="light" />
+      <View style={{ height: insets.top }} className="bg-bur-blue" />
+      <Navbar title={i18n.t('favorites')} />
+
       {!favorites || Object.keys(favorites).length === 0 ? (
         <View className="m-auto items-center px-8">
           <View className="bg-bur-yellow-light rounded-full p-6 mb-4">

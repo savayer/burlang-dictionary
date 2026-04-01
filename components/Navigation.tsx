@@ -58,8 +58,8 @@ export default function Navigation() {
         tabBarIcon: ({ color }: { color: string }) => (
           <Ionicons name="star-outline" size={iconHeight} color={color} />
         ),
-        title: 'Избранное',
         tabBarLabel: i18n.t('favorites').toLowerCase(),
+        headerShown: false,
       },
     },
     {
@@ -85,10 +85,8 @@ export default function Navigation() {
             color={color}
           />
         ),
-        title: 'Информация',
-        headerLargeStyle: true,
-        headerLargeTitle: 'Информация',
         tabBarLabel: i18n.t('information').toLowerCase(),
+        headerShown: false,
       },
     },
   ];

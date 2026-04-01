@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import Navbar from '@/components/Navbar';
 import getShadow from '@/utils/getShadow';
 import i18n from '@/constants/i18n';
 
@@ -13,6 +16,7 @@ interface WebPage {
 }
 
 export default function Settings() {
+  const insets = useSafeAreaInsets();
   const webPages: (WebPage & { iconBg: string })[] = [
     {
       title: i18n.t('web_dictionary'),
@@ -32,6 +36,10 @@ export default function Settings() {
 
   return (
     <View className="flex-1 bg-bur-bg">
+      <StatusBar style="light" />
+      <View style={{ height: insets.top }} className="bg-bur-blue" />
+      <Navbar title={i18n.t('information')} />
+
       <Image
         source={require('@/assets/adaptive-icon.png')}
         className="absolute w-72 h-72 self-center top-1/2 -mt-36"
