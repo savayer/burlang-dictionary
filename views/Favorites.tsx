@@ -1,11 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  Alert,
-} from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { View, Text, ScrollView, Pressable, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from '@/constants/i18n';
 import groupBy from '@/utils/groupBy';
@@ -67,6 +61,8 @@ interface FavoritesProps {
 export default function Favorites({ navigation }: FavoritesProps) {
   const insets = useSafeAreaInsets();
   const [favorites, setFavorites] = useState<Record<string, FavoriteItem[]>>();
+  const openSwipeableRef = useRef<Swipeable | null>(null);
+  const swipeableRefs = useRef<Map<string, Swipeable>>(new Map());
 
   useEffect(() => {
     navigation.addListener('focus', () => {
@@ -82,6 +78,7 @@ export default function Favorites({ navigation }: FavoritesProps) {
 
   async function deleteWordFromFavorites(type: string, key: string) {
     try {
+      openSwipeableRef.current = null;
       await AsyncStorage.removeItem(key);
       const favorites = await loadFavorites();
 
@@ -101,8 +98,13 @@ export default function Favorites({ navigation }: FavoritesProps) {
         onPress={() => deleteWordFromFavorites(type, word)}
       >
         {({ pressed }) => (
-          <View className={twMerge('py-2 px-4 rounded-xl justify-center bg-red-500', pressed && 'bg-red-600')}>
-            <Text className="text-white m-auto font-bold">{i18n.t('delete')}</Text>
+          <View
+            className={twMerge(
+              'py-2 px-3 h-full rounded-xl justify-center items-center bg-red-300',
+              pressed && 'bg-red-400',
+            )}
+          >
+            <Ionicons name="trash-outline" size={22} color="white" />
           </View>
         )}
       </Pressable>
@@ -132,7 +134,12 @@ export default function Favorites({ navigation }: FavoritesProps) {
             onPress={() => navigation.navigate('Home')}
           >
             {({ pressed }) => (
-              <View className={twMerge('rounded-full px-8 py-3 bg-bur-blue', pressed && 'bg-bur-blue/80')}>
+              <View
+                className={twMerge(
+                  'rounded-full px-8 py-3 bg-bur-blue',
+                  pressed && 'bg-bur-blue/80',
+                )}
+              >
                 <Text className="text-center text-white text-base font-bold">
                   {i18n.t('search_words')}
                 </Text>
@@ -156,7 +163,26 @@ export default function Favorites({ navigation }: FavoritesProps) {
               <View className="gap-2">
                 {favorites[type].map((translation, i) => (
                   <Swipeable
-                    key={i}
+                    key={translation.key}
+                    ref={(ref) => {
+                      if (ref) {
+                        swipeableRefs.current.set(translation.key, ref);
+                      } else {
+                        swipeableRefs.current.delete(translation.key);
+                      }
+                    }}
+                    onSwipeableWillOpen={() => {
+                      const current = swipeableRefs.current.get(
+                        translation.key,
+                      );
+                      if (
+                        openSwipeableRef.current &&
+                        openSwipeableRef.current !== current
+                      ) {
+                        openSwipeableRef.current.close();
+                      }
+                      openSwipeableRef.current = current ?? null;
+                    }}
                     renderLeftActions={DeleteButton.bind(
                       null,
                       type,
@@ -174,7 +200,12 @@ export default function Favorites({ navigation }: FavoritesProps) {
                       onPress={searchFavoriteWord.bind(null, translation)}
                     >
                       {({ pressed }) => (
-                        <View className={twMerge('flex-row items-center px-4 py-3 rounded-xl bg-white', pressed && 'bg-neutral-100')}>
+                        <View
+                          className={twMerge(
+                            'flex-row items-center px-4 py-3 rounded-xl bg-white',
+                            pressed && 'bg-neutral-100',
+                          )}
+                        >
                           <View className="flex-1">
                             <Text className="font-bold text-bur-blue text-base">
                               {translation.key.toLowerCase()}
