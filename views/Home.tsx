@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFetchData } from '@/components/hooks/useFetchData';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
+import { twMerge } from 'tailwind-merge';
 import getShadow from '@/utils/getShadow';
 
 export default function Home({ route }) {
@@ -244,28 +245,27 @@ export default function Home({ route }) {
             className="mt-3"
             onPress={onPressHandler}
           >
-            {isLoading ? (
-              <View className="bg-neutral-300 rounded-full h-12 justify-center">
-                <Text className="text-white font-bold text-center text-base">
-                  {i18n.t('translate')}
-                </Text>
-              </View>
-            ) : (
-              <LinearGradient
-                colors={['#f5c65c', '#f1b742']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-                style={{
-                  borderRadius: 9999,
-                  height: 48,
-                  justifyContent: 'center',
-                }}
+            <LinearGradient
+              colors={
+                isLoading ? ['#d4d4d4', '#d4d4d4'] : ['#f5c65c', '#f1b742']
+              }
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{
+                borderRadius: 9999,
+                height: 48,
+                justifyContent: 'center',
+              }}
+            >
+              <Text
+                className={twMerge(
+                  'font-bold text-center text-base text-bur-blue-dark',
+                  isLoading && 'text-white',
+                )}
               >
-                <Text className="text-bur-blue-dark font-bold text-center text-base">
-                  {i18n.t('translate')}
-                </Text>
-              </LinearGradient>
-            )}
+                {i18n.t('translate')}
+              </Text>
+            </LinearGradient>
           </TouchableOpacity>
         </View>
 
